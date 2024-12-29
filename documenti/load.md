@@ -1,0 +1,91 @@
+# Analisi Dati - Load
+Analisi dati della MOPTA competition 2024, "Electricity Load"
+
+// #### Elenco attività
+
+## Considerazioni preliminari
+#### Variabilità dei dati rispetto a *Quarter*
+
+#### Varianza *Quarter*
+// e influenza sul grafico 3D
+#### Trasformata di Fourier delle serie temporali
+
+
+## Fit univariato^1
+Come primo approccio alla modellazione dei dati proposti si può procedere considerando unicamente Load vs Instance (l'ora del giorno), ed ignorando le altre informazioni fornite: periodo e location. I dati vengono tuttavia suddivisi tra "zone industriali" e "zone residenziali" in quanto hanno proprietà molto diverse.
+Naturalmente non sarebbe permesso a priori effettuare tale operazione, dal momento che non vi è garanzia che i dati vengano generati secondo uno stesso modello in diversi periodi, e sopratutto in diversi posti (a meno di normalizzazione).
+
+### k-neighborhood
+
+
+### Modelli polinomiali
+In questa sezione provo a trovare il miglior modello del tipo $y=b_0+b_1 x+b_2 x^2+...$ per il carico (Load) rispetto al tempo (Instance). I valori per`Instance` sono stati rinormalizzati a formato orario, che è più leggibile e riduce i problemi di overflow per modelli di ordine alto.
+
+Per la scelta del modello sono stati utilizzati diversi criteri: *Test F*, *FPE*, *AIC*, *MDL*, *Crossvalidazione k-fold* (con k=2 e 4).
+
+#### Dati industriali
+Per quanto riguarda I dati di aree industriali tutti i criteri indicano polinomi di quarto grado, ovvero con 5 parametri, come la scelta migliore, con $MSE=18.2\text{MWh}^2$.
+$$y_{ind}(t)=10.95-4.12x+1.20x^2-0.07x^3+0.001x^4$$ 
+
+![all_industrial_f_best_fit](immagini/all_industrial_f_best_fit.png)
+
+#### Dati residenziali
+I dati relativi alle aree residenziali mostrano al contrario notevoli criticità. I diversi criteri suggeriscono modelli di ordine diverso, e tutti modelli di ordine molto elevato: 9 parametri per tutti i criteri eccetto MDL, che indica come migliore un modello a 6 parametri.
+Questo non è tuttavia inatteso, dal momento che MDL privilegia modelli più parsimoniosi. E per modelli di ordine alto, con SSR stabile all'aumentare di q, il termine dominante diventa quello di penalizzazione si q, che cresce come $\sim qln(N)/N$.
+
+Vi sono inoltre problemi di identificabilità (rango matrice di sensitività). Di conseguanza è possibile concludere che modelli di tipo polinomiale non siano la miglior classe di modelli per analizzare questi dati.
+Valore $MSE=28.7\text{MWh}^2$ nel caso di polinomi con 9 parametri.
+
+![all_residential_f_best_fit](immagini/all_residential_f_best_fit.png)
+
+Tale risultato non è sorprendente se si considerano le differenze tra le serie di dati disponibili considerando il periodo: i dati relativi a periodi diversi occupano aree chiaramente diverse, contraddicendo l'ipotesi iniziale che i dati vengano generati secondo la stessa distribuzione indipendentemente dal periodo. OSS. questo non è invece vero per i dati delle aree industriali.
+
+![all_residenzial_load_period](all_residenzial_load_period.png)
+
+### Serie di Fourier
+In questa sezione provo a trovare il miglior modello del tipo 
+$$y=b_0+
+	b_1sin\left(\dfrac{2\pi}{T}x\right)+b_2cos\left(\dfrac{2\pi}{T}x\right)+
+	b_3sin\left(2\dfrac{2\pi}{T}x\right)+b_4cos\left(2\dfrac{2\pi}{T}x\right)+...+
+	b_{2k-1}sin\left(k\dfrac{2\pi}{T}x\right)+b_{2k}cos\left(k\dfrac{2\pi}{T}x\right)$$
+per il carico (Load) rispetto al tempo (Instance).
+
+Considerata la natura periodica di generazione dei dati (ciclo giornaliero) e la rinormalizzazione dei tempi in ore, qui $T=24$, e non sembrerebbe necessario utilizzare periodi più lunghi di T=24h.
+
+
+Per la scelta del modello sono stati utilizzati gli stessi criteri considerati in precedenza: *Test F*, *FPE*, *AIC*, *MDL*, *Crossvalidazione k-fold* (con k=2 e 4).
+
+
+#### Dati residenziali
+
+Nel caso dei dati resideniali tutti i criteri sono concordi nel preferire un modello a 5 parametri, con $MSE=28.9\text{MWh}^2$. I risultati sono abbastanza simili a quelli ottenuti con il modello polinomiale,
+ma a fronte di un numero molto minore di parametri, e senza incorrere in problemi di identificabilità.
+
+![all_residential_FvsPoli](all_residential_FvsPoli.png)
+
+Può essere interessante considerare le singole armoniche che contribuiscono alla previsione per verificare se è possibile dire qualcosa circa l'*interpretabilità* del modello. 
+La figura seguente rappresenta le armoniche sommate a $b_0$ (il parametro costante) e amplificate di un fattore 4 (per migliorarne la visibilità). Viene mantenuta l'ampiezza relativa delle armoniche.
+
+![all_residential_f_components](all_residential_f_components.png)
+
+> Nel codice matlab sono state utilizzate nell'ordine $cos$ e $sin$ per ogni armonica, quindi la componente 1 nell'immagine è il $cos(f_0x)$ (con segno meno).
+
+Effettivamente la fondamentale (1) rende conto dell'andamento globale della giornata, con consumi alti durante il giorno, e consumi bassi durante la notte, mentre la componente sinusoidale (2) dell'asimmetria tra attività nella prima metà giornata e nella seconda.
+
+Le componenti successive (3 e 4) constribuiscono a ricostruire i due picchi giornalieri intorno alle 8am e 8pm, probabilmente dovute all'attività domestica dei residenti. 
+Può essere interessante notare che le due componenti ricostruiscono una sinusoide sfasata rispetto all'inizio della giornata, e che traslando i dati relativi ai tempi è probabilmente possibile ridurre ulteriormente il numero di parametri necessari.
+Sarà poi analogamente interessante verificare se le fondamentale abbia andamento simile anche nelle aree industriali per verificare se esso possa essere considerato di uguale origine, permettendo quindi di interpretare i due casi come: *attività industriale*, per le aree industriali e *attività industriale+attività domestica* per le aree residenziali.
+
+#### Dati industriali
+Per quanto riguarda i dati industriali non vi sono particolari miglioramenti rispetto ai modelli polinomiali: viene indicato il modello a 5 parametri con $MSE=18.15\text{MWh}^2$.
+Per quanto riguarda l'interpretabilità non sono presenti elementi di interesse eccetto la predominanza della fondamentale (cos) rispetto a tutte le altre componenti ($b_1=-12.14$, $|b_i|<6.1$ per $k>1$).
+
+### Splines
+
+## Fit serie temporali al variare della location
+## Fit serie temporali al variare del periodo
+## Fit serie temporali al variare per periodo e location
+In questa sezione effettuo la ricerca dei modelli migliori per descrivere le singole serie temporali di ciascuna location.
+
+
+^1 Verificare la correttezza del termine
