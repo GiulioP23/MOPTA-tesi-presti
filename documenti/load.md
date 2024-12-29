@@ -27,7 +27,7 @@ Per la scelta del modello sono stati utilizzati diversi criteri: *Test F*, *FPE*
 Per quanto riguarda I dati di aree industriali tutti i criteri indicano polinomi di quarto grado, ovvero con 5 parametri, come la scelta migliore, con $MSE=18.2\text{MWh}^2$.
 $$y_{ind}(t)=10.95-4.12x+1.20x^2-0.07x^3+0.001x^4$$ 
 
-![all_industrial_f_best_fit](immagini/all_industrial_f_best_fit.png)
+![all_industrial_f_best_fit](../immagini/all_industrial_f_best_fit.png)
 
 #### Dati residenziali
 I dati relativi alle aree residenziali mostrano al contrario notevoli criticità. I diversi criteri suggeriscono modelli di ordine diverso, e tutti modelli di ordine molto elevato: 9 parametri per tutti i criteri eccetto MDL, che indica come migliore un modello a 6 parametri.
