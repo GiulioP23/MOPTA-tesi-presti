@@ -36,11 +36,11 @@ Questo non è tuttavia inatteso, dal momento che MDL privilegia modelli più par
 Vi sono inoltre problemi di identificabilità (rango matrice di sensitività). Di conseguanza è possibile concludere che modelli di tipo polinomiale non siano la miglior classe di modelli per analizzare questi dati.
 Valore $MSE=28.7\text{MWh}^2$ nel caso di polinomi con 9 parametri.
 
-![all_residential_f_best_fit](immagini/all_residential_f_best_fit.png)
+![all_residential_f_best_fit](../immagini/all_residential_f_best_fit.png)
 
 Tale risultato non è sorprendente se si considerano le differenze tra le serie di dati disponibili considerando il periodo: i dati relativi a periodi diversi occupano aree chiaramente diverse, contraddicendo l'ipotesi iniziale che i dati vengano generati secondo la stessa distribuzione indipendentemente dal periodo. OSS. questo non è invece vero per i dati delle aree industriali.
 
-![all_residenzial_load_period](all_residenzial_load_period.png)
+![all_residenzial_load_period](../immagini/all_residenzial_load_period.png)
 
 ### Serie di Fourier
 In questa sezione provo a trovare il miglior modello del tipo 
@@ -61,12 +61,12 @@ Per la scelta del modello sono stati utilizzati gli stessi criteri considerati i
 Nel caso dei dati resideniali tutti i criteri sono concordi nel preferire un modello a 5 parametri, con $MSE=28.9\text{MWh}^2$. I risultati sono abbastanza simili a quelli ottenuti con il modello polinomiale,
 ma a fronte di un numero molto minore di parametri, e senza incorrere in problemi di identificabilità.
 
-![all_residential_FvsPoli](all_residential_FvsPoli.png)
+![all_residential_FvsPoli](../immagini/all_residential_FvsPoli.png)
 
 Può essere interessante considerare le singole armoniche che contribuiscono alla previsione per verificare se è possibile dire qualcosa circa l'*interpretabilità* del modello. 
 La figura seguente rappresenta le armoniche sommate a $b_0$ (il parametro costante) e amplificate di un fattore 4 (per migliorarne la visibilità). Viene mantenuta l'ampiezza relativa delle armoniche.
 
-![all_residential_f_components](all_residential_f_components.png)
+![all_residential_f_components](../immagini/all_residential_f_components.png)
 
 > Nel codice matlab sono state utilizzate nell'ordine $cos$ e $sin$ per ogni armonica, quindi la componente 1 nell'immagine è il $cos(f_0x)$ (con segno meno).
 
