@@ -1,0 +1,11 @@
+function [] = md_test_result(header, theta, std, mse)
+    fprintf('|-------------------------|\n')
+    fprintf('%s\n', header)
+    fprintf('| $\theta$|$\sigma$ |')
+    fprintf('|%d parametri|\n', length(theta))
+    for n=1:length(theta)
+        fprintf('|%8.2f|%8.2f|\n', n, theta(n), std(n))
+    end
+    fprintf('MSE  %5.2f',  mse)
+end
+

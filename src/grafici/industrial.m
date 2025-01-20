@@ -5,7 +5,7 @@ close all
 
 df = caricaLoad(); % nota: la funzione deve essere aggiunta al path di matlab
 
-%% Residential Load - All data
+%% Industrial Load - All data
 % Rappresenta tutti i carichi industriali, indipendentemente dal periodo,
 % in funzione del tempo
 
@@ -53,7 +53,7 @@ pbaspect([2, 1, 1])
 
 %% Varianza per instance
 % Grafico che rappresenta la varianza della variabile "Load" per ogni
-% "instance".
+% "instance" (tempo).
 figure('Units','normalized', 'Position', [0.1, 0.1, 0.6, 0.5]);
 hold on;
 
