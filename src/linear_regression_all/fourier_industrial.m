@@ -17,7 +17,7 @@ full_phi=[ones(N, 1) ...
      cos(2*2*pi/T*industrial_instances) sin(2*2*pi/T*industrial_instances)... 
      cos(3*2*pi/T*industrial_instances) sin(3*2*pi/T*industrial_instances)...
      cos(4*2*pi/T*industrial_instances) sin(4*2*pi/T*industrial_instances)...
- ];
+];
 
 % Regression and Model Selection
 %% 3. Test F
@@ -33,10 +33,7 @@ for q=2:9
     e = industrial_load - loadLS;
     ssr = sum(e.^2);
     varEst=ssr/(N-q);
-    
-    % disp("Modello a q="+q+" parametri");
-    % disp("- SSR="+SSR+" thetaLS="+nthetaLS+" theta_std="+ntheta_std);
-    
+
     f = (N-q)*(SSR-ssr)/ssr;
     f_alpha = finv(0.95, 1, N-q);
     
