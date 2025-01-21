@@ -394,7 +394,7 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
         Y0=phi_graph(:, 1:1)*nthetaLS(1);
         
         for n=2:length(nthetaLS)
-            Y=3.2*phi_graph(:, n:n)*nthetaLS(n) + Y0;
+            Y=phi_graph(:, n:n)*nthetaLS(n) + Y0;
             plot(X, Y, 'DisplayName', "componente "+(n-1), 'LineWidth', 1.2);
         end
         
