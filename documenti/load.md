@@ -141,7 +141,9 @@ Utilizzando i modelli polinomiali si ottengono risultati opposti ai precedenti: 
 
 ![2_i_q2_MDL_poli](/immagini/2_i_q2_MDL_poli.png)
 
-Analogamente per le aree residenziali diversi criteri indicano diversi modelli, spesso o molto complessi (9-param) o molto semplici (3 param), cosa che conferma l'ipotesi formulata inizialmente che i modelli polinomiali non siano adatti a descrivere le serie delle aree residenziali.
+Analogamente, per le aree residenziali diversi criteri indicano diversi modelli, spesso o molto complessi (9-param) o molto semplici (3 param), cosa che conferma l'ipotesi formulata inizialmente che i modelli polinomiali non siano adatti a descrivere le serie delle aree residenziali.
+
+*Ordine del modello polinomiale ottimale secondo il Final Prediction Error (FPE) per 2_r.*
 
 | Quarter | Ordine | 
 |:-----: |:------: |
@@ -149,8 +151,6 @@ Analogamente per le aree residenziali diversi criteri indicano diversi modelli, 
 |    Q2 |     9 | 
 |    Q3 |     2 | 
 |    Q4 |     7 | 
-
-Ordine del modello polinomiale ottimale secondo il Final Prediction Error (FPE) per *2_r*.
 
 ![2_r_q1_FPE_poli](/immagini/2_r_q1_FPE_poli.png)
 
