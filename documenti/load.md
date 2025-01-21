@@ -112,8 +112,7 @@ Per quanto riguarda l'interpretabilità non sono presenti elementi di interesse 
 
 ### Splines
 
-## Fit serie temporali al variare della location (Load vs Instance by Location and Period)
-In questa sezione provo a modellare le singole serie temporali disponibili per ogni location.
+
 
 ### Modelli polinomiali
 
@@ -122,9 +121,11 @@ In questa sezione provo a modellare le singole serie temporali disponibili per o
 
 ### Splines
 
-## Fit serie temporali al variare del periodo (Load vs Instance by Period)
+## Fit serie temporali al variare del periodo (Load vs Instance by Quarter)
 
-## Fit serie temporali al variare di periodo e location (Load vs Instance and Period by Location)
+## Fit serie temporali al variare della location (Load vs Instance and Quarter by Location)
+
+## Fit serie temporali al variare di periodo e location (Load vs Instance by Location and Quarter)
 In questa sezione effettuo la ricerca dei modelli migliori per descrivere le singole serie temporali di ciascuna location.
 
 ### Serie di Fourier
