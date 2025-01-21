@@ -129,12 +129,12 @@ In questa sezione effettuo la ricerca dei modelli migliori per descrivere le sin
 
 ### Serie di Fourier
 Per le serie **residenziali** anche in questo caso i criteri utilizzati indicano concordemente come miglior modelli quelli a 5 parametri.
-[3_r_load_by_period](/immagini/3_r_load_by_period.png)
+![3_r_load_by_period](/immagini/3_r_load_by_period.png)
 
 
 Per le serie **industriali** i criteri utilizati suggeriscono modelli di ordine molto elevato (9-13 parametri, 13 massimo numero di parametri considerato), cosa che potrebbe portare a concludere che la serie di Fourier non sia adatta a descrivere tali serie.
 La crossvalidazione (4-fold) in questo caso restituisce valori molto diversi anche per la stessa serie e non è molto utile a determinare la complessità del modello.
-[1_i_q1_FPE](/immagini/1_i_q1_FPE.png)
+![1_i_q1_FPE](/immagini/1_i_q1_FPE.png)
 
 
 ^1 Verificare la correttezza del termine
