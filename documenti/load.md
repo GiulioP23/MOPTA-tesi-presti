@@ -129,12 +129,34 @@ In questa sezione effettuo la ricerca dei modelli migliori per descrivere le sin
 
 ### Serie di Fourier
 Per le serie **residenziali** anche in questo caso i criteri utilizzati indicano concordemente come miglior modelli quelli a 5 parametri.
-![3_r_q3_MDL](/immagini/3_r_q3_MDL.png)
+![3_r_q3_MDL_fourier](/immagini/3_r_q3_MDL_fourier.png)
 
 
 Per le serie **industriali** i criteri utilizzati suggeriscono modelli di ordine molto elevato (9-13 parametri, 13 massimo numero di parametri considerato), cosa che potrebbe portare a concludere che la serie di Fourier non sia adatta a descrivere tali serie.
 La crossvalidazione (4-fold) in questo caso restituisce valori molto diversi anche per la stessa serie e non è molto utile a determinare la complessità del modello.
-![1_i_q1_FPE](/immagini/1_i_q1_FPE.png)
+![1_i_q1_FPE_fourier](/immagini/1_i_q1_FPE_fourier.png)
+
+### Modelli polinomiali
+Utilizzando i modelli polinomiali si ottengono risultati opposti ai precedenti: per le serie relative alle aree industriali tutti i criteri indicano modelli a 5 parametri come ottimali.
+
+![2_i_q2_MDL_poli](/immagini/2_i_q2_MDL_poli.png)
+
+Analogamente per le aree residenziali diversi criteri indicano diversi modelli, spesso o molto complessi (9-param) o molto semplici (3 param), cosa che conferma l'ipotesi formulata inizialmente che i modelli polinomiali non siano adatti a descrivere le serie delle aree residenziali.
+
+| Quarter | Ordine | 
+|:-----: |:------: |
+|    Q1 |     2 | 
+|    Q2 |     9 | 
+|    Q3 |     2 | 
+|    Q4 |     7 | 
+
+Ordine del modello polinomiale ottimale secondo il Final Prediction Error (FPE) per *2_r*.
+
+![2_r_q1_FPE_poli](/immagini/2_r_q1_FPE_poli.png)
+
+![2_r_q2_FPE_poli](/immagini/2_r_q2_FPE_poli.png)
+
+
 
 
 ^1 Verificare la correttezza del termine
