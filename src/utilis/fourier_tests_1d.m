@@ -366,14 +366,14 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
     testParam(5) = q;
     
     %% Fourier Armoniche
-    phi = full_phi(:, 1:5);
+    phi = full_phi(:, 1:q);
     [nthetaLS, ntheta_std] = lscov(phi, data_load);
     loadLS = phi*nthetaLS;
     if pics
         % display
         figure('Units','normalized', 'Position', [0.1, 0.1, 0.6, 0.5]);
         hold on;
-        title('Residential Load');
+        title(data_desc);
         subtitle('Fourier components');
         
         xlabel("Instance (hours)")
@@ -389,7 +389,7 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
                               ];
         scatter(data_instances+1, data_load, ".", 'HandleVisibility','off')
         
-        Y_LS = phi_graph(:, 1:5)*nthetaLS;
+        Y_LS = phi_graph(:, 1:q)*nthetaLS;
         
         Y0=phi_graph(:, 1:1)*nthetaLS(1);
         

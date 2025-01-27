@@ -73,3 +73,13 @@ q4_nn = df{log_nn('Q4'), "Instance"};
 (q4_nn(length(q4_nn))+q4_nn(1))/2.
 
 
+%% tests
+df = caricaSolar();
+
+length(df.Quarter)
+
+length(unique(df.Quarter))
+
+length(unique(df.Instance))
+
+length(df.Instance(df.Instance==1, :))
