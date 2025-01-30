@@ -5,7 +5,6 @@ clc
 close all
 
 df = caricaSolar(); % nota: la funzione deve essere aggiunta al path di matlab
-df.Period = 1*(df.Quarter=='Q1')+92*(df.Quarter=='Q2')+183*(df.Quarter=='Q3')+274*(df.Quarter=='Q4');
 
 %% Data selection and analysis
 condititon=logical(df.Generation.^0); %df.Generation>0;
