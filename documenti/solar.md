@@ -130,9 +130,9 @@ Modello migliore (test F) per *Q1*:
 Come visto nelle serie giornaliere identificare un modello che approssimi soddisfacientemente tutti i dati forniti obbliga a ricorrere a modelli di ordine elevato. Nel caso bidimensionale il problema diventa ancora più significativo, dal momento che bisogna tenere conto dei termini di interazione.
 Effettivamente diversi tentativi in tal senso non hanno prodotto risultati apprezzabili, nonostante si siano utilizzati dei modelli molto flessibili (primo ordine, secondo ordine con termini di interazione, ordini successivi fino al 6° per *Quarter*, 11° per *Instance* senza interazione).
 
-In questi tentativi si è utilizzato come periodo quello noto, ovvero $T_y=365$ (periodo per *Quarter*) e $T_d=24$ (periodo per *Instance*), ottenendo un modello a 9 parametri (dopo aver effettuato una regolarizzazione) con $MSE=1.9\cdot 10^{-6}MWh^$.
+In questi tentativi si è utilizzato come periodo quello noto, ovvero $T_y=365$ (periodo per *Quarter*) e $T_d=24$ (periodo per *Instance*), ottenendo un modello a 9 parametri (dopo aver effettuato una regolarizzazione) con $MSE=1.9\cdot10^{-6}MWh^2$.
 
-Risultati leggermente migliori sono stati ottenuti utilizzando un periodo doppio (per entrambe le grandezze) ottenendo un modello a 14 parametri con $MSE=8.7\cdot 10^{-7}MWh^$, e incrementando la complessità massima del modello (serie completa fino al 4° ordine, circa 50 params).
+Risultati leggermente migliori sono stati ottenuti utilizzando un periodo doppio (per entrambe le grandezze) ottenendo un modello a 14 parametri con $MSE=8.7\cdot10^{-7}MWh^2$, e incrementando la complessità massima del modello (serie completa fino al 4° ordine, circa 50 params).
 Tuttavia si notano considerevoli criticità in questi casi per la predizione nei *Quarter* per cui non si dispone di dati. In questi casi i modelli per *Generation* tendono a prevedere ampiezze crescenti, mentre dovrebbero restituire un valore nullo.
 
 
