@@ -129,4 +129,31 @@ lgd.Title.String='Period';
 
 pbaspect([2, 1, 1])
 
-%% FFT
+%% FFT by period
+
+figure('Units','normalized', 'Position', [0.1, 0.1, 0.6, 0.5]);
+hold on;
+
+title('Solar Generation FFT');
+subtitle('Ampiezza vs Frequency');
+
+xlabel("Frequency (d^{-1})")
+ylabel("Ampiezza (MWh\cdot d)")
+instances = unique(df.Instance);
+periods = unique(df.Quarter);
+Ts=0.0104; % 0.010 4in giorni, o 0.25 in ore
+fs=1/Ts;
+for n=1:4    
+    y=df.Generation(df.Quarter==periods(n));
+    yTrasf = fft(y);
+    Y=abs(fftshift(yTrasf));
+   
+    qn = 96;%length(x);
+    X = (-qn/2:qn/2-1)*(fs/qn);
+    plot(X, Y, '-', DisplayName=periods(n))
+end
+
+lgd=legend();
+lgd.Title.String='Period';
+
+pbaspect([2, 1, 1])

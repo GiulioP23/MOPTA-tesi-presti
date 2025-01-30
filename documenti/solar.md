@@ -52,7 +52,9 @@ Per quanto riguarda la possibilità di individuare un modello apprioriato anche 
 Nonostante non ci si potesse attendere che l'andamento rispetto a *Quarter* fosse il medesimo per diverse *Instance* le caratteristiche individuate sopra potrebbero rendere l'individuazione di un modello con due variabili non semplice.
 
 ### Trasformata di Fourier
+La trasformata di Fourier effettuata con i tutti i dati, per ogni serie temporale, non evidenzia particolari di interesse. Risulta soltanto un picco per frequenza nulla, conseguenza del fatto che l'integrale del segnale è nonnullo (essendo esso strettamente positivo).
 
+![all_fft_by_period](/immagini/solar/all_fft_by_period.png)
 
 ## Identificazione modelli sulle serie giornaliere
 Inizialmente procedo provando ad identificare un modello polinomiale utilizzando tutti i dati disponibili nelle serie giornaliere.
