@@ -16,7 +16,7 @@ title('Solar Energy');
 subtitle('Generation vs Instance');
 
 xlabel("Instance (local time)")
-ylabel("Load (MWh)")
+ylabel("Generation (MWh)")
 
 periods = unique(df.Quarter);
 for n=1:4
@@ -65,7 +65,7 @@ subtitle('Generation vs Instance and Period')
 
 xlabel('Instance (hours)')
 ylabel('Period (day)')
-zlabel('Load (MWh)')
+zlabel('Generation (MWh)')
 
 periodGrid = linspace(0.9*min(days), 1.1*max(days), 100)';
 instanceGrid = linspace(0.9*min(instances), 1.1*max(instances), 100)';
@@ -100,3 +100,6 @@ for q=1:4
 
     fprintf("- Quarter: %s: %2.2fh\n", quarter, inst_2-inst_1)
 end
+
+%% Instance over period - samples
+% Rappresentazione dell'andamento di Generation 
