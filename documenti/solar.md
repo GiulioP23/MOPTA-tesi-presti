@@ -12,7 +12,7 @@ Informazioni aggiuntive:
 - The electricity supply from solar PV is dependent on meteorological conditions.
 - Electricity generation data is provided for a quarterly 'average' day in the region for a single solar PV unit.
 
-#### Variabilità dei dati rispetto a *Quarter*
+### Variabilità dei dati rispetto a *Quarter*
 Uno dei fattori che più influenzano la produzione di energia elettrica è il periodo dell'anno. La produzione di energia nel periodo estivo circa doppia rispetto a quella del periodo invernale.
 
 ![al_by_period](/immagini/solar/all_by_period.png)
@@ -39,6 +39,20 @@ Naturalmente non vi è garanzia che le serie giornaliere siano state raccolte a 
 
 Il fatto che le durate delle giornate per i giorni in Q2 e Q4 siano uguali suggerisce che siano effettivamente stati selezionati due giorni a 6 mesi di distanza.
 Inoltre l'andamento della durate delle giornate permette di concludere che il luogo in cui sono state effettuate le misure si trova nell'emisfero boreale.
+
+### Andamento Instance vs Quarter
+Per quanto riguarda la possibilità di individuare un modello apprioriato anche per $G(d)$ (*generation* vs *day*), e successivamente $G(i, d)$ si incontrano diversi problemi.
+- I dati disponibili per ciascun *Instance* sono solo quattro. Risulta pertanto difficile immaginare di identificare modelli particolarmente complessi.
+- Diverse *Isntance* hanno andamento diverso:
+  - per offset
+  - per intercetta con l'asse delle ascisse
+
+![isnt_gen_by_quarter](/immagini/solar/isnt_gen_by_quarter.png)
+
+Nonostante non ci si potesse attendere che l'andamento rispetto a *Quarter* fosse il medesimo per diverse *Instance* le caratteristiche individuate sopra potrebbero rendere l'individuazione di un modello con due variabili non semplice.
+
+### Trasformata di Fourier
+
 
 ## Identificazione modelli sulle serie giornaliere
 Inizialmente procedo provando ad identificare un modello polinomiale utilizzando tutti i dati disponibili nelle serie giornaliere.

@@ -102,4 +102,31 @@ for q=1:4
 end
 
 %% Instance over period - samples
-% Rappresentazione dell'andamento di Generation 
+% Rappresentazione dell'andamento di Generation al variare di Quarter per
+% diverse instances, in modo da evidenziare possibili problematiche con il
+% fit lungo quarter
+
+figure('Units','normalized', 'Position', [0.1, 0.1, 0.6, 0.5]);
+hold on;
+
+title('Solar Energy');
+subtitle('Generation vs Quarter (by Instance)');
+
+xlabel("Quarter (day)")
+ylabel("Generation (kWh)")
+ytickformat('%.1f')
+instances = unique(df.Instance);
+
+for n=26:15:80    
+    X = df.Period(df.Instance==instances(n));
+    Y = 1000*df.Generation(df.Instance==instances(n));
+   
+    plot(X, Y, '.-', DisplayName=sprintf('Instance %d', n))
+end
+
+lgd=legend();
+lgd.Title.String='Period';
+
+pbaspect([2, 1, 1])
+
+%% FFT
