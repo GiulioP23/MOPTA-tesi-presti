@@ -52,9 +52,10 @@ Per quanto riguarda la possibilità di individuare un modello apprioriato anche 
 Nonostante non ci si potesse attendere che l'andamento rispetto a *Quarter* fosse il medesimo per diverse *Instance* le caratteristiche individuate sopra potrebbero rendere l'individuazione di un modello con due variabili non semplice.
 
 ### Trasformata di Fourier
-La trasformata di Fourier effettuata con i tutti i dati, per ogni serie temporale, non evidenzia particolari di interesse. Risulta soltanto un picco per frequenza nulla, conseguenza del fatto che l'integrale del segnale è nonnullo (essendo esso strettamente positivo).
+La trasformata di Fourier effettuata con i tutti i dati, per ogni serie temporale, non evidenzia particolari di interesse. Risulta soltanto un picco per frequenza nulla, conseguenza del fatto che l'integrale del segnale è diverso da zero (essendo esso strettamente positivo).
 
 ![all_fft_by_period](/immagini/solar/all_fft_by_period.png)
+
 
 ## Identificazione modelli sulle serie giornaliere
 Inizialmente procedo provando ad identificare un modello polinomiale utilizzando tutti i dati disponibili nelle serie giornaliere.
@@ -126,8 +127,19 @@ Modello migliore (test F) per *Q1*:
 // *Serie regressione lineare con vincolo nell'origine f(0)=0*
 
 ## Identificazione modello 3D
-Come visto nelle serie giornaliere identificare un modello che approssimi soddisfacientemente tutti i dati forniti obbliga a ricorrere a modelli di ordine elevato. Nel caso bidimensionale il problema diventa ancora più significativo, dal momento che bisogna tenere conto anche dei termini di interazione.
-Effettivamente diversi tentativi in tal senso non hanno prodotto risultati apprezzabili.
+Come visto nelle serie giornaliere identificare un modello che approssimi soddisfacientemente tutti i dati forniti obbliga a ricorrere a modelli di ordine elevato. Nel caso bidimensionale il problema diventa ancora più significativo, dal momento che bisogna tenere conto dei termini di interazione.
+Effettivamente diversi tentativi in tal senso non hanno prodotto risultati apprezzabili, nonostante si siano utilizzati dei modelli molto flessibili (primo ordine, secondo ordine con termini di interazione, ordini successivi fino al 6° per *Quarter*, 11° per *Instance* senza interazione).
+
+In questi tentativi si è utilizzato come periodo quello noto, ovvero $T_y=365$ (periodo per *Quarter*) e $T_d=24$ (periodo per *Instance*), ottenendo un modello a 9 parametri (dopo aver effettuato una regolarizzazione) con $MSE=1.9\cdot 10^{-6}MWh^$.
+
+Risultati leggermente migliori sono stati ottenuti utilizzando un periodo doppio (per entrambe le grandezze) ottenendo un modello a 14 parametri con $MSE=8.7\cdot 10^{-7}MWh^$, e incrementando la complessità massima del modello (serie completa fino al 4° ordine, circa 50 params).
+Tuttavia si notano considerevoli criticità in questi casi per la predizione nei *Quarter* per cui non si dispone di dati. In questi casi i modelli per *Generation* tendono a prevedere ampiezze crescenti, mentre dovrebbero restituire un valore nullo.
+
+
+
+
+Sembrerebbero esserci problemi legati in particolar modo alla gestione delle aree in cui la funzione è nulla.
+
 
 In tal caso procedo con l'identificazione sui soli valori di generazione positivi, applicando poi la funzione parte positiva per le previsioni sull'intera giornata.
 ### Modello polinomiale G(h, p)
