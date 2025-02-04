@@ -111,23 +111,10 @@ Modello migliore (test F) per *Q1*:
 | -1.05e-04 | 4.17e-05 | 
 | 4.88e-05 | 4.17e-05 | 
 
-// ### Not null
-// Eliminazione dei dati nulli, per identificare il modello solamente sui valori positivi di generazione. 
-
-//In questo caso costruisco la matrice di sensitività applicando la funzione *parte positiva* ai termini della funzione di regressione. L'obiettivo è quello di ridurre la complessità del modello, sfruttando il fatto che l'informazione presente laddove non vi è generazione di energia (dovuta al fatto che il sole non è ancora sorto) può essere in realtà rappresentata più semplicemente dalla funzione menzionata. In effetti per tutte le instances prima del sorgere del sole è naturale attendersi che l'energia prodotta sia nulla.  <!-- vedi anche come P(Generazione | Sole) con P(Generazione|not Sole)=0-->
-
-// Tale approccio richiede però un algoritmo di ottimizzazione vincolata.
-
-// è anche possibile utilizzare delle splines con 3 nodi, ottenendo modelli notevolmente più semplici: 4 parametri, nel caso della serie di Fourier, 2 due nel caso polinomiale. <!-- definizione corretta di spline, formalmente qui il terzo segmento non è ottenuto come spline -->
-
-// ![q1_3k_spline_fourier_FPE](/immagini/solar/q1_3k_spline_fourier_FPE.png)
-// *Serie di Fourier vincolata*
-
-// ![q1_3k_spline_poli_FPE](/immagini/solar/q1_3k_spline_poli_FPE.png) <!-- da discutere--> 
-// *Serie regressione lineare con vincolo nell'origine f(0)=0*
 
 ## Identificazione modello 3D
-Come visto nelle serie giornaliere identificare un modello che approssimi soddisfacientemente tutti i dati forniti obbliga a ricorrere a modelli di ordine elevato. Nel caso bidimensionale il problema diventa ancora più significativo, dal momento che bisogna tenere conto dei termini di interazione.
+### Complessità uniformemente crescente per *Quarter* e *Instance*
+Come visto nelle serie giornaliere identificare un modello che approssimi soddisfacentemente tutti i dati forniti obbliga a ricorrere a funzioni di ordine elevato. Nel caso bidimensionale il problema diventa ancora più significativo, dal momento che bisogna tenere conto dei termini di interazione.
 Effettivamente diversi tentativi in tal senso non hanno prodotto risultati apprezzabili, nonostante si siano utilizzati dei modelli molto flessibili (primo ordine, secondo ordine con termini di interazione, ordini successivi fino al 6° per *Quarter*, 11° per *Instance* senza interazione).
 
 In questi tentativi si è utilizzato come periodo quello noto, ovvero $T_y=365$ (periodo per *Quarter*) e $T_d=24$ (periodo per *Instance*), ottenendo un modello a 9 parametri (dopo aver effettuato una regolarizzazione) con $MSE=1.9\cdot10^{-6}MWh^2$.
@@ -135,15 +122,40 @@ In questi tentativi si è utilizzato come periodo quello noto, ovvero $T_y=365$ 
 Risultati leggermente migliori sono stati ottenuti utilizzando un periodo doppio (per entrambe le grandezze) ottenendo un modello a 14 parametri con $MSE=8.7\cdot10^{-7}MWh^2$, e incrementando la complessità massima del modello (serie completa fino al 4° ordine, circa 50 params).
 Tuttavia si notano considerevoli criticità in questi casi per la predizione nei *Quarter* per cui non si dispone di dati. In questi casi i modelli per *Generation* tendono a prevedere ampiezze crescenti, mentre dovrebbero restituire un valore nullo.
 
+![overfit_all_2_3d](/immagini/solar/overfit_all_2_3d.png)
 
+![overfit_all_3d](/immagini/solar/overfit_all_3d.png)
 
+Analogamente utilizzando un periodo più lungo, e un modello opportunamente ridimensionato (meno complesso) si ottengono risultati lievemente migliori, ma comunque con notevoli problematiche nelle zone di generazione nulla.
 
-Sembrerebbero esserci problemi legati in particolar modo alla gestione delle aree in cui la funzione è nulla.
+Provando ad utilizzare la stepwise (forward) selection si riescono ad ottenere risultati migliori con $MSE=5.7\cdot10^{-7}MWh^2$
 
+![all_as2_stepwise](/immagini/solar/all_as2_stepwise.png)
 
-In tal caso procedo con l'identificazione sui soli valori di generazione positivi, applicando poi la funzione parte positiva per le previsioni sull'intera giornata.
-### Modello polinomiale G(h, p)
-Per selezionare il polinomio più adatto è stato utilizzato Lasso con $\lambda=4.69\cdot10^{-5}$ (scelto come index1SE).
+### Complessità fissa in *Quarter*, crescente in *Instance*
+Utilizzando invece un modello con complessità limitata in *Quarter*, approccio giustificato dal basso numero di dati disponibili, si ottengono risultati migliori, con $MSE=6.57\cdot10^{-7}MWh^2$
+
+![all_3d_as](/immagini/solar/all_3d_as.png)
+
+Utilizzando il Test F per un modello di ordine crescente in *Instance*, e del primo ordine in *Quarter* viene selezionato una serie di ordine 5 (33 parametri), con $MSE=7.27\cdot10^{-7}MWh^2$.
+
+![all_F_asQ1vsIN](/immagini/solar/all_F_asQ1vsIN.png)
+
+### Altri approcci
+Comse si è visto, i risultati ottenuti con gli approcci "diretti" non sono del tutto soddisfacenti. Si può pensare allora di scomporre il problema, utilizzando il teorema di Bayes e una stima a posteriori.
+Effettivamente la funzione ha due comportamenti nettamente distinti: nulla (esattamente) nelle *Instance* in cui il sole non è presente, e un certo andamento caratteristico quando invece il sole è presente.
+Per ridurre la complessità del problema si può quindi pensare di suddividere in problema in funzione delle fdp "a priori" sull'andamento della presenza del sole.
+$$f_I(g)=k\cdotf_I(g|s)\cdotf_I(s)$$
+Dove $f_I$ è la distribuzione per una determinata *Instance*, e $f(s)$ è la distribuzione per la presenza del sole, con $s$ che assume valori binari (0 o 1).
+Il problema si riduce a questo punto ad un problema di classificazione per $f_I(s)$ ($\forall I$), ed uno di regressione per $f_I(g|s)$. 
+
+Il vantaggio è che in questo modo posso effettuare il fit per le sole zone in cui la produzione di energia è positiva, senza essere vincolato a dover passare per i punti G=0, il che elimina i problemi:
+- frequenze alte introdotte dalla non derivabilità in $G=0$ (Fourier)
+- compensazione per $G\rightarrow\inf$ (polinomi).
+
+Di conseguenza dovrebbe risultare possibile utilizzare modelli molto meno complessi, e con risultati globali migliori (i punti per G=0 non peggiorano l'SSR).
+
+![q1_3k_spline_fourier_FPE](/immagini/solar/q1_3k_spline_fourier_FPE.png)
 
 
 ### Modello polinomiale
