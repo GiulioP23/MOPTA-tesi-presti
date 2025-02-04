@@ -145,7 +145,9 @@ Utilizzando il Test F per un modello di ordine crescente in *Instance*, e del pr
 Comse si è visto, i risultati ottenuti con gli approcci "diretti" non sono del tutto soddisfacenti. Si può pensare allora di scomporre il problema, utilizzando il teorema di Bayes e una stima a posteriori.
 Effettivamente la funzione ha due comportamenti nettamente distinti: nulla (esattamente) nelle *Instance* in cui il sole non è presente, e un certo andamento caratteristico quando invece il sole è presente.
 Per ridurre la complessità del problema si può quindi pensare di suddividere in problema in funzione delle fdp "a priori" sull'andamento della presenza del sole.
+
 $$f_I(g)=k\cdot f_I(g|s)\cdot f_I(s)$$
+
 Dove $f_I$ è la distribuzione per una determinata *Instance*, e $f(s)$ è la distribuzione per la presenza del sole, con $s$ che assume valori binari (0 o 1).
 Il problema si riduce a questo punto ad un problema di classificazione per $f_I(s)$ ($\forall I$), ed uno di regressione per $f_I(g|s)$. 
 
