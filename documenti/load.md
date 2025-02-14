@@ -110,7 +110,7 @@ Per quanto riguarda i dati industriali vengono indicati modelli di ordine più a
 Per quanto riguarda l'interpretabilità non sono presenti elementi di interesse eccetto la predominanza della fondamentale (cos) rispetto a tutte le altre componenti ($b_1=-12.14$, $|b_i|<6.1$ per $k>1$).
 
 ### Risultati
-Con questo primo approccio non ci si attendevano risultati eccellenti, ed effettivamente sono emerse diverse criticità: problemi di identificabilità (rango matrice di verosimiglianza), bontà del fit limitata (in molti casi $R^2\tilde0.5$), bias nelle previsioni per *Quarter* (valori sovrastimati per il periodo invernale, e sottostimati per il periodo estivo).
+Con questo primo approccio non ci si attendevano risultati eccellenti, ed effettivamente sono emerse diverse criticità: problemi di identificabilità (rango matrice di verosimiglianza), bontà del fit limitata (in molti casi $R^2\sim 0.5$), bias nelle previsioni per *Quarter* (valori sovrastimati per il periodo invernale, e sottostimati per il periodo estivo).
 Inoltre i modelli polinomiali si sono mostrati più adatti (ordine basso) alla modellazione del problema per i dati industriali, mentre la serie di Fourier è risultata migliore per la modellazione del problema per i dati residenziali. 
 Questi risultati possono essere schematizzati nella figura seguente:
 
@@ -132,7 +132,7 @@ Questi risultati possono essere schematizzati nella figura seguente:
 In questa sezione effettuo la ricerca dei modelli migliori per descrivere le singole serie temporali di ciascuna location.
 
 ### Serie di Fourier
-Per le serie **residenziali** anche in questo caso i criteri utilizzati indicano concordemente come miglior modelli quelli a 5 parametri con $R^2\tilde 0.9$.
+Per le serie **residenziali** anche in questo caso i criteri utilizzati indicano concordemente come miglior modelli quelli a 5 parametri con $R^2\sim 0.9$.
 ![3_r_q3_MDL_fourier](/immagini/3_r_q3_MDL_fourier.png)
 
 
@@ -160,10 +160,9 @@ Analogamente, per le aree residenziali diversi criteri indicano diversi modelli,
 
 ![2_r_q2_FPE_poli](/immagini/2_r_q2_FPE_poli.png)
 
-![2_r_q2_poli_plotregression](/immagini/2_r_q2_poli_plotregression.png)
 
 ### Risultati
-Analizzando le singole serie individualmente per *Quarter* e *Location* si riescono ad ottenere buoni risultati (laddove l'ordine del modello non venga chiaramente sottostimato), con $R^2\tilde 0.9$.
+Analizzando le singole serie individualmente per *Quarter* e *Location* si riescono ad ottenere buoni risultati (laddove l'ordine del modello non venga chiaramente sottostimato), con $R^2\sim 0.9$.
 
 | Location | Period | Model | N-params (FPE)| $R^2$ |
 |:-----:|:-----:|:-----:|:-----:|:-----:|
@@ -171,5 +170,7 @@ Analizzando le singole serie individualmente per *Quarter* e *Location* si riesc
 |    2_i |     Q2 |     Poli |      5 |     0.9464 |
 |    1_r |     Q3 |     Fourier |      5 |     0.8752 |
 |    2_r |     Q2 |     Poli |      10 |     0.9035 |
+
+![2_r_q2_poli_plotregression](/immagini/2_r_q2_poli_plotregression.png)
 
 ^1 Verificare la correttezza del termine
