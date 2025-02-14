@@ -3,7 +3,7 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
     testMSE = [0,0,0,0,0];
     testParam = [0,0,0,0,0];
     
-    markd=true; % display in md format
+    markd=false; % display in md format
     data_load=data.Load;
     
     data_instances=data.Instance;
@@ -17,6 +17,9 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
          cos(4*2*pi/T*data_instances) sin(4*2*pi/T*data_instances)...
          cos(5*2*pi/T*data_instances) sin(5*2*pi/T*data_instances)...
          cos(6*2*pi/T*data_instances) sin(6*2*pi/T*data_instances)...
+         cos(7*2*pi/T*data_instances) sin(7*2*pi/T*data_instances)...
+         cos(8*2*pi/T*data_instances) sin(8*2*pi/T*data_instances)...
+         cos(9*2*pi/T*data_instances) sin(9*2*pi/T*data_instances)...
      ];
     
     % Regression and Model Selection
@@ -24,9 +27,9 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
     thetaLS = [mean(data_load)];
     theta_std = [std(data_load)/sqrt(N)];
     
-    SSR=sum((data_load-thetaLS).^2);
-    
-    for q=3:2:13 % discutere con p. incremento di 2, per includere sen e cos per ogni frequenza
+    TSS=sum((data_load-thetaLS).^2);
+    SSR=TSS;
+    for q=3:2:19 % discutere con p. incremento di 2, per includere sen e cos per ogni frequenza
         phi = full_phi(:, 1:q);
         [nthetaLS, ntheta_std] = lscov(phi, data_load);
         loadLS = phi*nthetaLS;
@@ -35,7 +38,7 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
         varEst=ssr/(N-q);
         
         f = (N-q)*(SSR-ssr)/ssr;
-        f_alpha = finv(0.95, 2, N-q); % rivedi
+        f_alpha = finv(0.95, 2, N-q);
         
         if f<f_alpha
             q=q-2;
@@ -57,7 +60,7 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
             for n=1:q
                 disp("  b_"+(n-1) +" = " + thetaLS(n)+" std="+theta_std(n))
             end
-            disp("MSE="+SSR/N)
+            fprintf("MSE=%.2e R2=%.4f\n", SSR/N, 1-SSR/TSS)
         end
     end
     testMSE(1) = SSR/N;
@@ -79,6 +82,9 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
                               cos(4*2*pi/T*X) sin(4*2*pi/T*X)...
                               cos(5*2*pi/T*X) sin(5*2*pi/T*X)...
                               cos(6*2*pi/T*X) sin(6*2*pi/T*X)...
+                              cos(7*2*pi/T*X) sin(7*2*pi/T*X)...
+                              cos(8*2*pi/T*X) sin(8*2*pi/T*X)...
+                              cos(9*2*pi/T*X) sin(9*2*pi/T*X)...
                               ];
         Y_LS = phi_graph(:, 1:q)*thetaLS;
         
@@ -93,10 +99,11 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
     thetaLS = [mean(data_load)];
     theta_std = [std(data_load)/sqrt(N)];
     
-    SSR = sum((data_load-thetaLS).^2);
-    
+    TSS = sum((data_load-thetaLS).^2);
+    SSR=TSS;
+
     FPE = (N+1)/(N-1)*SSR;
-    for q=3:2:13
+    for q=3:2:19
         phi = full_phi(:, 1:q);
         [nthetaLS, ntheta_std, mse] = lscov(phi, data_load);
         loadLS = phi*nthetaLS;
@@ -123,7 +130,7 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
         for n=1:q
             disp("  b_"+(n-1) +" = " + thetaLS(n)+" std="+theta_std(n))
         end
-        disp("MSE="+SSR/N)
+        fprintf("MSE=%.2e R2=%.4f\n", SSR/N, 1-SSR/TSS)
     end
     testMSE(2) = SSR/N;
     testParam(2) = q;
@@ -146,6 +153,9 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
             cos(4*2*pi/T*X) sin(4*2*pi/T*X)...
             cos(5*2*pi/T*X) sin(5*2*pi/T*X)...
             cos(6*2*pi/T*X) sin(6*2*pi/T*X)...
+            cos(7*2*pi/T*X) sin(7*2*pi/T*X)...
+            cos(8*2*pi/T*X) sin(8*2*pi/T*X)...
+            cos(9*2*pi/T*X) sin(9*2*pi/T*X)...
         ];
         Y_LS = phi_graph(:, 1:q)*thetaLS;
         
@@ -160,11 +170,12 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
     thetaLS = [mean(data_load)];
     theta_std = [std(data_load)/sqrt(N)];
     
-    SSR = sum((data_load-thetaLS).^2);
-    
+    TSS = sum((data_load-thetaLS).^2);
+    SSR=TSS;
+
     AIC = 2/N+log(SSR);
     
-    for q=3:2:13
+    for q=3:2:19
         phi = full_phi(:, 1:q);
         [nthetaLS, ntheta_std] = lscov(phi, data_load);
         loadLS = phi*nthetaLS;
@@ -193,7 +204,7 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
         for n=1:q
             disp("  b_"+(n-1) +" = " + thetaLS(n)+" std="+theta_std(n))
         end
-        disp("MSE="+SSR/N)
+        fprintf("MSE=%.2e R2=%.4f\n", SSR/N, 1-SSR/TSS)
     end
     testMSE(3) = SSR/N;
     testParam(3) = q;
@@ -215,6 +226,9 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
                               cos(4*2*pi/T*X) sin(4*2*pi/T*X)...
                               cos(5*2*pi/T*X) sin(5*2*pi/T*X)...
                               cos(6*2*pi/T*X) sin(6*2*pi/T*X)...
+                              cos(7*2*pi/T*X) sin(7*2*pi/T*X)...
+                              cos(8*2*pi/T*X) sin(8*2*pi/T*X)...
+                              cos(9*2*pi/T*X) sin(9*2*pi/T*X)...
                               ];
         Y_LS = phi_graph(:, 1:q)*thetaLS;
         
@@ -229,11 +243,12 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
     thetaLS = [mean(data_load)];
     theta_std = [std(data_load)/sqrt(N)];
     
-    SSR = sum((data_load-thetaLS).^2);
-    
+    TSS = sum((data_load-thetaLS).^2);
+    SSR=TSS;
+
     MDL = log(N)/N+log(SSR);
     
-    for q=3:2:13
+    for q=3:2:19
         phi = full_phi(:, 1:q);
         [nthetaLS, ntheta_std] = lscov(phi, data_load);
         loadLS = phi*nthetaLS;
@@ -262,7 +277,7 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
         for n=1:q
             disp("  b_"+(n-1) +" = " + thetaLS(n)+" std="+theta_std(n))
         end
-        disp("MSE="+SSR/N)
+        fprintf("MSE=%.2e R2=%.4f\n", SSR/N, 1-SSR/TSS)
     end
     testMSE(4) = SSR/N;
     testParam(4) = q;
@@ -283,7 +298,10 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
                               cos(3*2*pi/T*X) sin(3*2*pi/T*X)...
                               cos(4*2*pi/T*X) sin(4*2*pi/T*X)...
                               cos(5*2*pi/T*X) sin(5*2*pi/T*X)...
-                              cos(6*2*pi/T*X) sin(6*2*pi/T*X)
+                              cos(6*2*pi/T*X) sin(6*2*pi/T*X)...
+                              cos(7*2*pi/T*X) sin(7*2*pi/T*X)...
+                              cos(8*2*pi/T*X) sin(8*2*pi/T*X)...
+                              cos(9*2*pi/T*X) sin(9*2*pi/T*X)...
                               ];
         Y_LS = phi_graph(:, 1:q)*thetaLS;
         
@@ -300,10 +318,11 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
     
     thetaLS = [mean(data_load)];
     theta_std = [std(data_load)/sqrt(N)];
-    SSR = sum((data_load-thetaLS).^2);
+    TSS = sum((data_load-thetaLS).^2);
+    SSR=TSS;
     MSE = SSR/N*10; %?
     
-    for q=2:13
+    for q=3:2:19
         mse=0;
         for k=1:K
             trainIds = training(c, k);
@@ -323,6 +342,9 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
                  cos(4*2*pi/T*XTrain) sin(4*2*pi/T*XTrain)...
                  cos(5*2*pi/T*XTrain) sin(5*2*pi/T*XTrain)...
                  cos(6*2*pi/T*XTrain) sin(6*2*pi/T*XTrain)...
+                 cos(7*2*pi/T*XTrain) sin(7*2*pi/T*XTrain)...
+                 cos(8*2*pi/T*XTrain) sin(8*2*pi/T*XTrain)...
+                 cos(9*2*pi/T*XTrain) sin(9*2*pi/T*XTrain)...
             ];
             full_phi_test = [XTest.^0 ...
                  cos(1*2*pi/T*XTest) sin(1*2*pi/T*XTest)...
@@ -331,6 +353,9 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
                  cos(4*2*pi/T*XTest) sin(4*2*pi/T*XTest)...
                  cos(5*2*pi/T*XTest) sin(5*2*pi/T*XTest)...
                  cos(6*2*pi/T*XTest) sin(6*2*pi/T*XTest)...
+                 cos(7*2*pi/T*XTest) sin(7*2*pi/T*XTest)...
+                 cos(8*2*pi/T*XTest) sin(8*2*pi/T*XTest)...
+                 cos(9*2*pi/T*XTest) sin(9*2*pi/T*XTest)...
             ];
             [nthetaLS, ntheta_std] = lscov(full_phi_train(:, 1:q), YTrain);
             loadLSTest = full_phi_test(:, 1:q)*nthetaLS;
@@ -342,7 +367,7 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
         end
     
         if mse>MSE
-            q = q-1;
+            q = q-2;
             break;
         end
     
@@ -360,7 +385,7 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
         for n=1:q
             disp("  b_"+(n-1) +" = " + thetaLS(n)+" std="+theta_std(n))
         end
-        disp("MSE="+MSE)
+        fprintf("MSE=%.2e\n", MSE) % tolgo R2 perchè andrebbe ricalcolato l'SSR con tutti i valori
     end
     testMSE(5) = MSE;
     testParam(5) = q;
@@ -385,7 +410,10 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
                               cos(3*2*pi/T*X) sin(3*2*pi/T*X)...
                               cos(4*2*pi/T*X) sin(4*2*pi/T*X)...
                               cos(5*2*pi/T*X) sin(5*2*pi/T*X)...
-                              cos(6*2*pi/T*X) sin(6*2*pi/T*X)
+                              cos(6*2*pi/T*X) sin(6*2*pi/T*X)...
+                              cos(7*2*pi/T*X) sin(7*2*pi/T*X)...
+                              cos(8*2*pi/T*X) sin(8*2*pi/T*X)...
+                              cos(9*2*pi/T*X) sin(9*2*pi/T*X)...
                               ];
         scatter(data_instances+1, data_load, ".", 'HandleVisibility','off')
         
@@ -403,5 +431,17 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
     end
     mse_vec = dictionary(testNames, testMSE);
     n_params_vec = dictionary(testNames, testParam);
-end
 
+    %% Plotregression 
+    % grafico che rappresenta l'andamento delle previsioni rispetto ai
+    % valori misurati
+    if pics
+        figure()
+        phi = full_phi(:, 1:q);
+        [nthetaLS] = lscov(phi, data_load);
+        loadLS = phi*nthetaLS;
+        plotregression(data_load, loadLS, data_desc)
+        subtitle(sprintf("%d params model (cv selected)", q))
+    end
+    
+end

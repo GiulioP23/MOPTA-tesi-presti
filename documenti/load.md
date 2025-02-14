@@ -30,7 +30,7 @@ Confrontando l'andamento dei carichi (load) per ciascuna location al variare del
 
 ![3_r_load_by_period](/immagini/3_r_load_by_period.png) ![4_r_load_by_period](/immagini/4_r_load_by_period.png)
 
-Di conseguenza il trimestre potrebbe non essere una stima accurata del giorno ($d=\fraq{4q}{360}$), e la varianza su tale dato andrebbe calcolata sulla base delle informazioni fornite: varianza di una distribuzione uniforme su 91 giorni.
+Di conseguenza il trimestre potrebbe non essere una stima accurata del giorno ($d=\frac{4q}{360}$), e la varianza su tale dato andrebbe calcolata sulla base delle informazioni fornite: varianza di una distribuzione uniforme su 91 giorni.
 
 
 #### Varianza dei dati rispetto a *Instance*
@@ -54,7 +54,8 @@ In questa sezione provo a trovare il miglior modello del tipo $y=b_0+b_1 x+b_2 x
 Per la scelta del modello sono stati utilizzati diversi criteri: *Test F*, *FPE*, *AIC*, *MDL*, *Crossvalidazione k-fold* (con k=2 e 4).
 
 #### Dati industriali
-Per quanto riguarda I dati di aree industriali tutti i criteri indicano polinomi di quarto grado, ovvero con 5 parametri, come la scelta migliore, con $MSE=18.2\text{MWh}^2$.
+Per quanto riguarda I dati di aree industriali tutti i criteri indicano polinomi di quarto grado, ovvero con 5 parametri, come la scelta migliore, con $MSE=18.2\text{MWh}^2$ e $R^2=0.84$.
+
 $$y_{ind}(t)=10.95-4.12x+1.20x^2-0.07x^3+0.001x^4$$ 
 
 ![all_industrial_f_best_fit](/immagini/all_industrial_f_best_fit.png)
@@ -64,13 +65,11 @@ I dati relativi alle aree residenziali mostrano al contrario notevoli criticità
 Questo non è tuttavia inatteso, dal momento che MDL privilegia modelli più parsimoniosi. E per modelli di ordine alto, con SSR stabile all'aumentare di q, il termine dominante diventa quello di penalizzazione si q, che cresce come $\sim qln(N)/N$.
 
 Vi sono inoltre problemi di identificabilità (rango matrice di sensitività). Di conseguenza è possibile concludere che modelli di tipo polinomiale non siano la miglior classe di modelli per analizzare questi dati.
-Valore $MSE=28.7\text{MWh}^2$ nel caso di polinomi con 9 parametri.
+Valore $MSE=28.7\text{MWh}^2$ nel caso di polinomi con 9 parametri, $R^2=0.48$.
 
 ![all_residential_f_best_fit](/immagini/all_residential_f_best_fit.png)
 
-Tale risultato non è sorprendente se si considerano le differenze tra le serie di dati disponibili considerando il periodo: i dati relativi a periodi diversi occupano aree chiaramente diverse, contraddicendo l'ipotesi iniziale che i dati vengano generati secondo la stessa distribuzione indipendentemente dal periodo. OSS. questo non è invece vero per i dati delle aree industriali.
-
-![all_residenzial_load_period](/immagini/all_residenzial_load_period.png)
+Tale risultato non è sorprendente se si considerano le differenze tra le serie di dati disponibili considerando il periodo: i dati relativi a periodi diversi occupano aree chiaramente diverse, contraddicendo l'ipotesi iniziale che i dati vengano generati secondo la stessa distribuzione indipendentemente dal periodo (questo non è invece vero per i dati delle aree industriali).
 
 ### Serie di Fourier
 In questa sezione provo a trovare il miglior modello del tipo 
@@ -88,7 +87,7 @@ Per la scelta del modello sono stati utilizzati gli stessi criteri considerati i
 
 #### Dati residenziali
 
-Nel caso dei dati residenziali tutti i criteri sono concordi nel preferire un modello a 5 parametri, con $MSE=28.9\text{MWh}^2$. I risultati sono abbastanza simili a quelli ottenuti con il modello polinomiale,
+Nel caso dei dati residenziali tutti i criteri sono concordi nel preferire un modello a 5 parametri, con $MSE=28.9\text{MWh}^2$ e $R^2=0.47$. I risultati sono abbastanza simili a quelli ottenuti con il modello polinomiale,
 ma a fronte di un numero molto minore di parametri, e senza incorrere in problemi di identificabilità.
 
 ![all_residential_FvsPoli](/immagini/all_residential_FvsPoli.png)
@@ -107,16 +106,20 @@ Può essere interessante notare che le due componenti ricostruiscono una sinusoi
 Sarà poi analogamente interessante verificare se le fondamentale abbia andamento simile anche nelle aree industriali per verificare se esso possa essere considerato di uguale origine, permettendo quindi di interpretare i due casi come: *attività industriale*, per le aree industriali e *attività industriale+attività domestica* per le aree residenziali.
 
 #### Dati industriali
-Per quanto riguarda i dati industriali non vi sono particolari miglioramenti rispetto ai modelli polinomiali: viene indicato il modello a 5 parametri con $MSE=18.15\text{MWh}^2$.
+Per quanto riguarda i dati industriali vengono indicati modelli di ordine più alto, 7-13 parametri, con $MSE=14.9\text{MWh}^2$ e $R^2=0.87$ (valori per un modello a 9 parametri selezionato con FPE).
 Per quanto riguarda l'interpretabilità non sono presenti elementi di interesse eccetto la predominanza della fondamentale (cos) rispetto a tutte le altre componenti ($b_1=-12.14$, $|b_i|<6.1$ per $k>1$).
 
-### Splines
+### Risultati
+Con questo primo approccio non ci si attendevano risultati eccellenti, ed effettivamente sono emerse diverse criticità: problemi di identificabilità (rango matrice di verosimiglianza), bontà del fit limitata (in molti casi $R^2\tilde0.5$), bias nelle previsioni per *Quarter* (valori sovrastimati per il periodo invernale, e sottostimati per il periodo estivo).
+Inoltre i modelli polinomiali si sono mostrati più adatti (ordine basso) alla modellazione del problema per i dati industriali, mentre la serie di Fourier è risultata migliore per la modellazione del problema per i dati residenziali. 
+Questi risultati possono essere schematizzati nella figura seguente:
+
+| 			| Residential Data | Industrial Data |
+|-----------|-----------|-----------|
+|  Fourier |![all_residential_fourier_plotregression](/immagini/all_residential_fourier_plotregression.png)| ![all_industrial_fourier_plotregression](/immagini/all_industrial_fourier_plotregression.png)| 
+| Polinomials | ![all_residential_poli_plotregression](/immagini/all_residential_poli_plotregression.png)| ![all_industrial_poli_plotregression](/immagini/all_industrial_poli_plotregression.png)| 
 
 
-
-### Modelli polinomiali
-
-### Serie di Fourier
 #### Trasformata di Fourier
 
 ### Splines
@@ -129,11 +132,11 @@ Per quanto riguarda l'interpretabilità non sono presenti elementi di interesse 
 In questa sezione effettuo la ricerca dei modelli migliori per descrivere le singole serie temporali di ciascuna location.
 
 ### Serie di Fourier
-Per le serie **residenziali** anche in questo caso i criteri utilizzati indicano concordemente come miglior modelli quelli a 5 parametri.
+Per le serie **residenziali** anche in questo caso i criteri utilizzati indicano concordemente come miglior modelli quelli a 5 parametri con $R^2\tilde 0.9$.
 ![3_r_q3_MDL_fourier](/immagini/3_r_q3_MDL_fourier.png)
 
 
-Per le serie **industriali** i criteri utilizzati suggeriscono modelli di ordine molto elevato (9-13 parametri, 13 massimo numero di parametri considerato), cosa che potrebbe portare a concludere che la serie di Fourier non sia adatta a descrivere tali serie.
+Per le serie **industriali** i criteri utilizzati suggeriscono modelli di ordine molto elevato (9-13 parametri), cosa che potrebbe portare a concludere che la serie di Fourier non sia adatta a descrivere tali dati.
 La crossvalidazione (4-fold) in questo caso restituisce valori molto diversi anche per la stessa serie e non è molto utile a determinare la complessità del modello.
 ![1_i_q1_FPE_fourier](/immagini/1_i_q1_FPE_fourier.png)
 
@@ -157,7 +160,16 @@ Analogamente, per le aree residenziali diversi criteri indicano diversi modelli,
 
 ![2_r_q2_FPE_poli](/immagini/2_r_q2_FPE_poli.png)
 
+![2_r_q2_poli_plotregression](/immagini/2_r_q2_poli_plotregression.png)
 
+### Risultati
+Analizzando le singole serie individualmente per *Quarter* e *Location* si riescono ad ottenere buoni risultati (laddove l'ordine del modello non venga chiaramente sottostimato), con $R^2\tilde 0.9$.
 
+| Location | Period | Model | N-params (FPE)| $R^2$ |
+|:-----:|:-----:|:-----:|:-----:|:-----:|
+|    1_i |    Q1 |     Fourier |      13 |     0.9907 |
+|    2_i |     Q2 |     Poli |      5 |     0.9464 |
+|    1_r |     Q3 |     Fourier |      5 |     0.8752 |
+|    2_r |     Q2 |     Poli |      10 |     0.9035 |
 
 ^1 Verificare la correttezza del termine
