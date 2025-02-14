@@ -10,7 +10,7 @@ df = caricaSolar(); % nota: la funzione deve essere aggiunta al path di matlab
 quarters = unique(df.Quarter);
 
 for q=1:4
-    quarter = quarters(q);        
+    quarter = quarters(q);    
     qData = df(df.Quarter==quarter, :);
     qData.Load=qData.Generation; % reuse load function
     [mse, params] = fourier_tests_1d(qData, sprintf("Solar Energy (%s)", quarter), false, false);

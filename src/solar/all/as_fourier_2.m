@@ -49,6 +49,7 @@ phi = [
 
 [B,FitInfo] = lasso(phi, generation, 'CV', 10); %"PredictorNames", ["c", "h", "p", "h2",  "p2", "hp", "h3", "p3", "h2p", "hp2", "h4", "h5", "h6", "h7", "h8"]
 
+
 % lassoPlot(B,FitInfo,PlotType="CV");
 
 predictions = phi*B(:, FitInfo.Index1SE)+FitInfo.Intercept(FitInfo.Index1SE);

@@ -32,4 +32,4 @@ locData = df(df.Location_Electricity==location, :);
 qData = locData(locData.Quarter==quarter, :);
 [mse, params] = polinomial_tests_1d(qData, sprintf("Location %s (%s)", location.replace('_', ''), quarter), true, true);   
 
-fprintf("Quarter %s, Location\nOrdine:%s\n\tF: %d\n\tFPE: %d\n\tAIC: %d\n\tMDL: %d\n\tCrossvalidazione: %d\n", quarter, location, params("F"), params("FPE"), params("AIC"), params("MDL"), params("CROSS"))
+fprintf("\nQuarter %s, Location\nOrdine:%s\n\tF: %d\n\tFPE: %d\n\tAIC: %d\n\tMDL: %d\n\tCrossvalidazione: %d\n", quarter, location, params("F"), params("FPE"), params("AIC"), params("MDL"), params("CROSS"))
