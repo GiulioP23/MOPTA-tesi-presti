@@ -41,12 +41,9 @@ Può essere interessante osservare preliminarmente l'andamento della varianza pe
 
 #### Trasformata di Fourier delle serie temporali
 
-
-## Fit univariato^1
+## Modelli single-feature (Instance)
 Come primo approccio alla modellazione dei dati proposti si può procedere considerando unicamente Load vs Instance (l'ora del giorno), ed ignorando le altre informazioni fornite: periodo e location. I dati vengono tuttavia suddivisi tra "zone industriali" e "zone residenziali" dal momento che mostrano proprietà molto diverse.
 Naturalmente non sarebbe permesso a priori effettuare tale operazione, dal momento che non vi è garanzia che i dati vengano generati secondo una stessa distribuzione in diversi periodi, e soprattutto in diverse location (a meno di normalizzazione).
-
-// ### k-neighborhood
 
 ### Modelli polinomiali
 In questa sezione provo a trovare il miglior modello del tipo $y=b_0+b_1 x+b_2 x^2+...$ per il carico (Load) rispetto al tempo (Instance). I valori per`Instance` sono stati rinormalizzati a formato orario, che è più leggibile e riduce i problemi di overflow per modelli di ordine alto.
@@ -120,13 +117,84 @@ Questi risultati possono essere schematizzati nella figura seguente:
 | Polinomials | ![all_residential_poli_plotregression](/immagini/all_residential_poli_plotregression.png)| ![all_industrial_poli_plotregression](/immagini/all_industrial_poli_plotregression.png)| 
 
 
-#### Trasformata di Fourier
+-- #### Trasformata di Fourier
 
-### Splines
+## Fit serie temporali al variare del periodo (Load vs Instance and Quarter)
+I risultati non ottimali emersi con l'approccio fin qui adottato suggeriscono di provare ad utilizzare modelli più ricchi e flessibili sfruttando le features disponibili fin qui ignorate (Quarter e Location).
 
-## Fit serie temporali al variare del periodo (Load vs Instance by Quarter)
+### Modello additivo: c(d)+f(h)
+Osservando il grafico che mostra Load vs Instance con colori diversi per Quarter è possibile vedere che i valori (per diversi trimestri) appaiono sovrapponibili 
+a meno di una costante. Un primo approccio può quindi essere quello di provare ad identificare modelli ottenuti come una funzione $f_i(h)$ che descrive l'andamento giornaliero del carico (Load) a cui viene sommata una costante il cui valore dipende dal giorno dell'anno $c(d)$.
+
+$$y=f_i(h)+c(d)$$
+
+Essendo disponibili pochi punti in Quarter non ha senso utilizzare modelli troppo complessi per descrivere c(t), mentre ci attendiamo che $f_i(h)$ abbia un andamento simile a quello identificato in precedenza. Ci attendiamo naturalmente anche di ottenere risultati complessivamente migliori rispetto a prima.
+
+Per identificare i modelli sono stati utlizzati i seguenti approci di feature selection: lasso, backward stepwise selection, forward stepwise selection, utilizzando diversi criteri (adjusted R2, BIC, AIC).
+Per $c(d)$ si sono provate serie di Fourier ($T=365\text{d}$) e polinomi di ordine basso (1°, 2°).
+
+#### Dati residenziali
+Utilizzando una serie di Fourier al primo ordine per modellizare $c(d)$ ed una serie di Fourier fino al 10° ordine per $f_i(h)$ si sono ottenuti modelli a 12-20 parametri, fino al 8-9° ordine in Instance, con $MSE=10.2\text{MWh}^2$ e $R^2=0.81$.
+
+![all_residential_load_lasso_const_f](/immagini/all_residential_load_lasso_const_f.png)
+![all_residential_load_lasso_const_f_plotregression](/immagini/all_residential_load_lasso_const_f_plotregression.png)
+
+Come si può vedere i risultati mostrati nel grafico "plotregression" non sono ottimali, specialmente nella zona di produzione bassa (sx). Effettivamente per questi valori i carichi (Load) per diversi periodi e location si sovrappongono (grafico iniziale), contrariamente alle ipotesi di modello additivo in $d$ e $h$.
+
+Utilizzando invece un polinomio per modellizzare $c(d)$ si sono ottenuti risultati simili con $MSE=10.05\text{MWh}^2$ e $R^2=0.82$.
+
+![all_residential_load_lasso_const_p](/immagini/all_residential_load_lasso_const_p.png)
+
+Volendo rappresentare separatamente $c(d)$ si ottengono le seguenti funzioni, dove è forse preferibile il primo approccio (fourier) per una migliore interpretabilità ed estensibilità del modello.
+
+![all_residential_load_lasso_const_both](/immagini/all_residential_load_lasso_const_both.png)
+
+#### Dati industriali
+Per i dati industriali si ottengono risultati leggermente migliori e più parsimoniosi (10-11 parametri), con $MSE=11.42\text{MWh}^2$ e $R^2=0.89$.
+
+![all_industrial_load_back_const_f](/immagini/all_industrial_load_back_const_f.png)
+![all_industrial_load_back_const_f_plotregression](/immagini/all_industrial_load_back_const_f_plotregression.png)
+
+Risultati ancora migliori (leggermente) per modelli con c polinomiale, con $MSE=11.04\text{MWh}^2$ e $R^2=0.90$.
+
+Il confronto tra i due risultati per c(d) è il seguente:
+![all_industrial_load_lasso_const_both](/immagini/all_industrial_load_lasso_const_both.png)
+
+Può essere interessante verificare se i due modelli per $c(d)$ siano comparabili:
+
+$$c_{ind}(d)=k_i+2.7\cdot \cos\left(\frac{2\pi}{T}d\right)-0.3\cdot\sin\left(\frac{2\pi}{T}d\right)$$
+
+$$c_{res}(d)=k_r+4.7\cdot \cos\left(\frac{2\pi}{T}d\right)-3.4\cdot\sin\left(\frac{2\pi}{T}d\right)$$
+
+che non permette di trarre conclusioni di particolare rilevanti.
+
+### Modello biperiodico
+Per ovviare alle problematiche evidenziate nel paragrafo precedente è opportuno aumentare la complessità del modello. Invece di considerare un semplice modello somma di una parte in $d$ (Quarter) ed una in $h$ (Instance) si può utilizzare una serie di Fourier bidimensionale, che quindi prende in considerazione anche tutti i termini di interazione del tipo $\sin(k_Q d)\cdot\cos(k_I h)$.
+
+Per la serie di Fourier si sono utilizzati periodi doppi rispetto a quelli attesi, ovvero 48h per Instance e 730d per Quarter, per tenere conto delle non-periodicità eventualmente presenti (legate ad esempio ad un trend pluriannuale).
+Per quanto riguarda la complessità massima considerata si è utilizzato un modello fino al 4° ordine in Instance, e fino al 2° in Quarter e analogamente per i termini di interazione (fino al 2° ordine per quelli misti).
+Per scegliere i predittori più opportuni si sono utilizzati i metodi indicati in precedenza: lasso shrinkage, stepwise selection.
+
+#### Dati residenziali
+Per i dati residenziali si sono ottenuti modelli a 18 parametri con $MSE=8.72\text{MWh}^2$ e $R^2=0.84$ (lasso selected).
+Inoltre in questo caso le previsioni sono distribuite più uniformemente rispetto al target (grafico previsione vs target).
+
+![all_residential_load_forw_plotregression](/immagini/all_residential_load_forw_plotregression.png)
+
+#### Dati industriali
+Per i dati industriali invece si sono ottenuti modelli di ordine più elevato (11-35 parametri) con $MSE=9.91\text{MWh}^2$ e $R^2=0.91$ (forward stepwise, 11 params).
+Inoltre in questo caso le previsioni sono distribuite più uniformemente rispetto al target (grafico previsione vs target).
+
+![all_industrial_load_forw_plotregression](/immagini/all_industrial_load_forw_plotregression.png)
 
 ## Fit serie temporali al variare della location (Load vs Instance and Quarter by Location)
+Dividendo infine il dataset per Location si riduce ulteriormente l'errore sulle previsioni. Diventa tuttavia più difficoltosa la validazione.
+- Per i dati _industriali_ si sono ottenuti modelli di flessibilità molto variabile a seconda dei criteri utilizzati (18-40 parametri), con $MSE=1.5\text{MWh}^2$ e $R^2=0.98$.
+
+![period_industrial_load_forw_f](/immagini/period_industrial_load_forw_f.png)
+![period_industrial_load_forw_plotregression](/immagini/period_industrial_load_forw_plotregression.png)
+
+- Per i dati _residenziali_ si sono ottenuti modelli a 27-30 parametri, con $MSE=3.0\text{MWh}^2$ e $R^2=0.92$ (17 params, forward stepwise, 1_r).
 
 ## Fit serie temporali al variare di periodo e location (Load vs Instance by Location and Quarter)
 In questa sezione effettuo la ricerca dei modelli migliori per descrivere le singole serie temporali di ciascuna location.

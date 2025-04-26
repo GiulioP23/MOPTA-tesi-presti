@@ -38,12 +38,12 @@ Naturalmente non vi è garanzia che le serie giornaliere siano state raccolte a 
 - Quarter: Q4: 12.75h
 
 Il fatto che le durate delle giornate per i giorni in Q2 e Q4 siano uguali suggerisce che siano effettivamente stati selezionati due giorni a 6 mesi di distanza.
-Inoltre l'andamento della durate delle giornate permette di concludere che il luogo in cui sono state effettuate le misure si trova nell'emisfero boreale.
+Inoltre, l'andamento delle durate delle giornate permette di concludere che il luogo in cui sono state effettuate le misure si trova nell'emisfero boreale.
 
 ### Andamento Instance vs Quarter
-Per quanto riguarda la possibilità di individuare un modello apprioriato anche per $G(d)$ (*generation* vs *day*), e successivamente $G(i, d)$ si incontrano diversi problemi.
+Per quanto riguarda la possibilità di individuare un modello appropriato anche per $G(d)$ (*generation* vs *day*), e successivamente $G(i, d)$ si incontrano diversi problemi.
 - I dati disponibili per ciascun *Instance* sono solo quattro. Risulta pertanto difficile immaginare di identificare modelli particolarmente complessi.
-- Diverse *Isntance* hanno andamento diverso:
+- Diverse *Instance* hanno andamento diverso:
   - per offset
   - per intercetta con l'asse delle ascisse
 
@@ -68,9 +68,9 @@ I diversi criteri utilizzati (test F, AIC, FPE, MDL, Crossvalidazione 4-fold) in
 Interessante è il caso di Q1, dove tutti i criteri suggeriscono un modello di ordine 0 (constante), a eccezione della crossvalidazione che invece indica un modello a 10 parametri.
 
 Modello migliore (test F) per *Q2*:
-| Ordine | MSE |
-|:----------: |:----------: |
-| 8 | 3.60e-07 |
+| Ordine | MSE | R2 |
+|:----------: |:----------: |:----------: |
+| 8 | 3.60e-07 | 0.96 |
 
 | $\theta$ | $\sigma$ | 
 |:----------: |:----------: |
@@ -83,8 +83,10 @@ Modello migliore (test F) per *Q2*:
 | 3.61e-08 | 1.59e-08 | 
 | -4.91e-10 | 1.87e-10 | 
 
+![q2_cross_poli_plotregression](/immagini/solar/q2_cross_poli_plotregression.png)
+
 ### Serie di Fourier
-I  citeri utilizzati indicano modelli di ordine elevato per tutti i trimestri: 7-11 param per *Q1*, 7-13 per *Q2*, 3-7 per *Q3*, 5-9 per *Q4*. 
+I criteri utilizzati indicano modelli di ordine elevato per tutti i trimestri: 7-11 param per *Q1*, 7-13 per *Q2*, 3-7 per *Q3*, 5-9 per *Q4*. 
 
 ![q1_MDL_fourier](/immagini/solar/q1_MDL_fourier.png)
 
@@ -93,9 +95,9 @@ E del resto si può vedere che molte delle componenti sono necessarie a ricostru
 ![q1_components_fourier](/immagini/solar/q1_components_fourier.png)
 
 Modello migliore (test F) per *Q1*:
-| Parametri | MSE |
-|:----------: |:----------: |
-| 11 | 7.40e-08 |
+| Parametri | MSE | R2 |
+|:----------: |:----------: |:----------: |
+| 11 | 7.40e-08 | 0.97 |
 
 | $\theta$ | $\sigma$ | 
 |:----------: |:----------: |
@@ -133,15 +135,15 @@ Provando ad utilizzare la stepwise (forward) selection si riescono ad ottenere r
 ![all_as2_stepwise](/immagini/solar/all_as2_stepwise.png)
 
 ### Complessità fissa in *Quarter*, crescente in *Instance*
-Utilizzando invece un modello con complessità limitata in *Quarter*, approccio giustificato dal basso numero di dati disponibili, si ottengono risultati migliori, con $MSE=6.57\cdot10^{-7}MWh^2$
+Utilizzando invece un modello con complessità limitata in *Quarter*, approccio giustificato dal basso numero di dati disponibili, si ottengono risultati migliori, con $MSE=6.57\cdot10^{-7}MWh^2$ e $R^2=0.91$
 
 ![all_3d_as](/immagini/solar/all_3d_as.png)
 
-Utilizzando il Test F per un modello di ordine crescente in *Instance*, e del primo ordine in *Quarter* viene selezionato una serie di ordine 5 (33 parametri), con $MSE=7.27\cdot10^{-7}MWh^2$.
+Utilizzando il Test F per un modello di ordine crescente in *Instance*, e del primo ordine in *Quarter* viene selezionato una serie di ordine 5 (33 parametri), con $MSE=7.27\cdot10^{-7}MWh^2$ e $R^2=0.91$.
 
 ![all_F_asQ1vsIN](/immagini/solar/all_F_asQ1vsIN.png)
 
-### Altri approcci
+## Altri approcci
 Comse si è visto, i risultati ottenuti con gli approcci "diretti" non sono del tutto soddisfacenti. Si può pensare allora di scomporre il problema, utilizzando il teorema di Bayes e una stima a posteriori.
 Effettivamente la funzione ha due comportamenti nettamente distinti: nulla (esattamente) nelle *Instance* in cui il sole non è presente, e un certo andamento caratteristico quando invece il sole è presente.
 Per ridurre la complessità del problema si può quindi pensare di suddividere in problema in funzione delle fdp "a priori" sull'andamento della presenza del sole.
@@ -157,9 +159,26 @@ Il vantaggio è che in questo modo posso effettuare il fit per le sole zone in c
 
 Di conseguenza dovrebbe risultare possibile utilizzare modelli molto meno complessi, e con risultati globali migliori (i punti per G=0 non peggiorano l'SSR).
 
-![q1_3k_spline_fourier_FPE](/immagini/solar/q1_3k_spline_fourier_FPE.png)
-
+### Positive subset
+Un modo di creare modelli conseguenti alle considerazioni appena fatte è quello di utilizzare un dataset ridotto ai soli punti per cui la generazione è positiva (`Generation`>0), ovvero quelli corrispondenti alle instance diurne.
+Sarà inoltre necessario imporre che i modelli restituiscano zero nei punti di generazione nulla, il che può essere fatto utilizzando una matrice $\Psi$ con pesi elevati in corrispondenza dei punti limite.
 
 ### Modello polinomiale
+I modelli ottenuti di tipo polinomiale hanno flessibilità variabile (15-20 parametri) a seconda del tipo di feature selection effettuata. Interessante il caso in cui il numero di parametri è molto basso (8 parametri) ottenuto con forward stepwise selection (BIC) con $MSE=2.05\cdot 10^{-6}\text{MWh}^2$ e $R^2=0.74$.
+
+Per ottenere il seguente risultato l'identificazione è stata effettuata soltanto sui dati (generazione) positivi e quelli nulli ad essi adiacenti, imponendo sui dati nulli residui un peso molto maggiore pari al numero di dati nulli totali, secondo il ragionamento del paragrafo precedente.
+
+Si rileva che con questo approccio $R^2$ risulta inferiore rispetto a prima (con tutti i dati), tuttavia va ricordato che
+
+![all_pos_poli_forward](/immagini/solar/all_pos_poli_forward.png)
+![all_pos_poli_forward_plotregression](/immagini/solar/all_pos_poli_forward_plotregression.png)
 
 ### Serie di Fourier
+Per quanto riguarda la serie di Fourier si ottengono risultati simili, con modelli a 10-20 parametri: ad esempio utilizzando lasso e limitando la complessità del modello in periods si ottiene $MSE=1.29\cdot 10^{-6}\text{MWh}^2$ e $R^2=0.84$.
+
+![all_pos_fourier_forward_plotregression](/immagini/solar/all_pos_fourier_forward_plotregression.png)
+
+### Modelli additivi
+I modelli additivi risultano in performance peggiori rispetto ai modelli precedenti con e.g. $MSE=2.05\cdot 10^{-6}\text{MWh}^2$ e $R^2=0.74$ per un modello forward stepwise selected a 8 parametri periodico in Quarter e polinomiale in Instance. Inoltre presentano un andamento target-output simile a quello ottenuto per Load.
+
+![all_pos_gam_forward_plotregression](/immagini/solar/all_pos_gam_forward_plotregression.png)
