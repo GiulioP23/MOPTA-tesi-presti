@@ -1,4 +1,4 @@
-% Solar Energy: linear regression (Polinomials) Biperiodic model
+% Solar Energy: linear regression (fourier) Biperiodic model
 % In questo caso effettuo la regressione lineare con complessità fissa
 % per Quarter (Period). Ordine massimo in Quarter: 2
 
@@ -67,10 +67,10 @@ hold on;
 scatter3(instances, periods, predictions)
 %plot3(instances, periods, predictions, 'b.')
 
-%% test
-b=B(:, FitInfo.Index1SE)
-c=b(b~=0)
-length(c)
+% %% test
+% b=B(:, FitInfo.Index1SE)
+% c=b(b~=0)
+% length(c)
 
 %% Fit sui regressori selezionati
 phi_lasso = [instances.^0 phi(:, regSelect)];

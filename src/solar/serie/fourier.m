@@ -28,13 +28,13 @@ qData = df(df.Quarter==quarter, :);
 qData.Load=qData.Generation;
 [mse, params] = fourier_tests_1d(qData, sprintf("Solar Energy (%s)", quarter), true, true);   
 
-fprintf("Quarter %s, Ordine:%d\n\tF: %d\n\tFPE: %d\n\tAIC: %d\n\tMDL: %d\n\tCrossvalidazione: %d\n", quarter, params("F"), params("FPE"), params("AIC"), params("MDL"), params("CROSS"))
+fprintf("Quarter %s, Ordine:%d\n\tF: %d\n\tFPE: %d\n\tAIC: %d\n\tMDL: %d\n\tCrossvalidazione: %d\n", quarter, params("F"), params("F"), params("FPE"), params("AIC"), params("MDL"), params("CROSS"))
 
 %% Not Null - Fourier
 % In quest sezione effettuo l'ottimizzazione soltanto sui dati positivi
 % di generazione
 
-quarter = "Q1";
+quarter = "Q2";
 
 inst_1 = min(df.Instance(all([df.Quarter==quarter, df.Generation~=0], 2)));
 inst_2 = max(df.Instance(all([df.Quarter==quarter, df.Generation~=0], 2)));

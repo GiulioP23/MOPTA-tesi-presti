@@ -10,7 +10,7 @@ quarters = unique(df.Quarter);
 %% Data selection and analysis
 
 for n=1:length(locations)
-    location = locations(n);    
+    location = locations(n);
 
     locData = df(df.Location_Electricity==location, :);
     for q=1:4

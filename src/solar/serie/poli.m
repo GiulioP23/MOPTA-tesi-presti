@@ -28,4 +28,4 @@ qData = df(df.Quarter==quarter, :);
 qData.Load=qData.Generation;
 [mse, params] = polinomial_tests_1d(qData, sprintf("Solar Energy (%s)", quarter), true, true);   
 
-fprintf("Quarter %s, Ordine:%d\n\tF: %d\n\tFPE: %d\n\tAIC: %d\n\tMDL: %d\n\tCrossvalidazione: %d\n", quarter, params("F"), params("FPE"), params("AIC"), params("MDL"), params("CROSS"))
+fprintf("Quarter %s, Ordine:%d\n\tF: %d\n\tFPE: %d\n\tAIC: %d\n\tMDL: %d\n\tCrossvalidazione: %d\n", quarter, params("F"), params("F"), params("FPE"), params("AIC"), params("MDL"), params("CROSS"))

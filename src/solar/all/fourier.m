@@ -11,7 +11,7 @@ condititon=logical(df.Generation.^0);  %df.Generation>0;
 instances = df.Instance(condititon);
 periods = df.Period(condititon);
 generation = df.Generation(condititon);
-Ty = 365; % (df.Period) yearly period, e sappiamo essere esattamente questo
+Ty = 2*365; % (df.Period) yearly period, e sappiamo essere esattamente questo
 Td = 24; % (df.Instance) daily period. Ancora una volta sappiamo essere esattamente questo a priori
 
 phi = [
