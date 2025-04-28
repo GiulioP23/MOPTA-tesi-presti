@@ -209,11 +209,11 @@ La crossvalidazione (4-fold) in questo caso restituisce valori molto diversi anc
 ![1_i_q1_FPE_fourier](/immagini/1_i_q1_FPE_fourier.png)
 
 ### Modelli polinomiali
-Utilizzando i modelli polinomiali si ottengono risultati opposti ai precedenti: per le serie relative alle aree industriali tutti i criteri indicano modelli a 5 parametri come ottimali.
+Utilizzando i modelli polinomiali si ottengono risultati opposti ai precedenti: per le serie relative alle aree industriali tutti i criteri indicano modelli a 5 parametri come ottimali con $MSE=5.47\text{MWh}^2$ e $R^2=0.95$.
 
 ![2_i_q2_MDL_poli](/immagini/2_i_q2_MDL_poli.png)
 
-Analogamente, per le aree residenziali diversi criteri indicano diversi modelli, spesso o molto complessi (9-param) o molto semplici (3 param), cosa che conferma l'ipotesi formulata inizialmente che i modelli polinomiali non siano adatti a descrivere le serie delle aree residenziali.
+Analogamente, per le aree residenziali diversi criteri indicano diversi modelli, spesso o molto complessi (9-param) o molto semplici (3 param), cosa che conferma l'ipotesi formulata inizialmente che i modelli polinomiali non siano adatti a descrivere le serie delle aree residenziali. Per AIC (Q2, 2r) si ottiene $MSE=1.8\text{MWh}^2$ e $R^2=0.9$.
 
 *Ordine del modello polinomiale ottimale secondo il Final Prediction Error (FPE) per 2_r.*
 
