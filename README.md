@@ -8,20 +8,21 @@ Le diverse cartelle contengono codice relativo a diversi approcci nell'analisi d
 Per eseguire il codice è neccessario aggiungere la cartella `utilis` al path di MATLAB, che contiene funzioni utilizzate nel resto del codice.
 
 ### Presentazione
+La presentazione si articola in 9 slides logiche, distribuite su 20 pagine.
 - Dataset e finalità
   - MOPTA competition
   - grafici
   - problematiche generali dati
+- Load
+  - dati load: problemi
+  - modelli
+    - 1D
+    - 3D (additivo)
 - Solar
   - dati solar: problemi
   - modelli
-    - 1D
     - 3D
     - Modello vincolato
-- Load
-  - dati load: problemi
-  - modelli (più breve)
-    - 1D
-    - 3D
+
 
   
