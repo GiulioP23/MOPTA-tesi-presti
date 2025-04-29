@@ -47,7 +47,14 @@ function [mse_vec, n_params_vec, select_vec] = tests_2d(data, phifun, data_desc,
         plot3D(data, phifun, thetaLS, data_desc, "(Lasso)", zlabel, regSelect)
         
         figure()
-        plotregression(data.Load, predictions, data_desc)
+        gof=plotregression(predictions, data.Load, data_desc);
+
+        ylabel=gof(1).CurrentAxes.YLabel.String;
+        ylabel = strrep(ylabel, "Target", "www");
+        ylabel = strrep(ylabel, "Output", "Target");
+        ylabel = strrep(ylabel, "www", "Output");
+        gof(1).CurrentAxes.YLabel.String=ylabel;
+        gof(1).CurrentAxes.XLabel.String="Output";
         subtitle(sprintf("%d params model (lasso)", q))
     end
     if verbose
@@ -87,7 +94,14 @@ function [mse_vec, n_params_vec, select_vec] = tests_2d(data, phifun, data_desc,
         plot3D(data, phifun, thetaLS, data_desc, "Forward Stepwise", zlabel, regSelect);
 
         figure();
-        plotregression(data_load, predictions, data_desc);
+        gof=plotregression(predictions, data_load, data_desc);
+
+        ylabel=gof(1).CurrentAxes.YLabel.String;
+        ylabel = strrep(ylabel, "Target", "www");
+        ylabel = strrep(ylabel, "Output", "Target");
+        ylabel = strrep(ylabel, "www", "Output");
+        gof(1).CurrentAxes.YLabel.String=ylabel;
+        gof(1).CurrentAxes.XLabel.String="Output";
         subtitle(sprintf("%d params model (forward stepwise)", sum(regSelect)));
     end
     if verbose
@@ -127,7 +141,14 @@ function [mse_vec, n_params_vec, select_vec] = tests_2d(data, phifun, data_desc,
         plot3D(data, phifun, thetaLS, data_desc, "Backward Stepwise", zlabel, regSelect);
 
         figure();
-        plotregression(data_load, predictions, data_desc);
+        gof=plotregression(predictions, data_load, data_desc);
+
+        ylabel=gof(1).CurrentAxes.YLabel.String;
+        ylabel = strrep(ylabel, "Target", "www");
+        ylabel = strrep(ylabel, "Output", "Target");
+        ylabel = strrep(ylabel, "www", "Output");
+        gof(1).CurrentAxes.YLabel.String=ylabel;
+        gof(1).CurrentAxes.XLabel.String="Output";
         subtitle(sprintf("%d params model (backward stepwise)", sum(regSelect)));
     end
     if verbose

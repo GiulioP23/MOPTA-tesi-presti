@@ -440,7 +440,14 @@ function [mse_vec, n_params_vec] = fourier_tests_1d(data, data_desc, verbose, pi
         phi = full_phi(:, 1:q);
         [nthetaLS] = lscov(phi, data_load);
         loadLS = phi*nthetaLS;
-        plotregression(data_load, loadLS, data_desc)
+        gof=plotregression(loadLS, data_load, data_desc);
+
+        ylabel=gof(1).CurrentAxes.YLabel.String;
+        ylabel = strrep(ylabel, "Target", "www");
+        ylabel = strrep(ylabel, "Output", "Target");
+        ylabel = strrep(ylabel, "www", "Output");
+        gof(1).CurrentAxes.YLabel.String=ylabel;
+        gof(1).CurrentAxes.XLabel.String="Output";
         subtitle(sprintf("%d params model (cv selected)", q))
     end
     
