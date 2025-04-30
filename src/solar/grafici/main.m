@@ -17,17 +17,28 @@ subtitle('Generation vs Instance');
 
 xlabel("Instance (local time)")
 ylabel("Generation (MWh)")
-
+% 
+% colors=["blue", "red", "yellow", "magenta"];
+colors = [
+    0.0000, 0.4470, 0.7410;  % blue
+    0.8500, 0.3250, 0.0980;  % orange
+    0.9290, 0.6940, 0.1250;  % yellow
+    0.4940, 0.1840, 0.5560   % purple
+];
 periods = unique(df.Quarter);
+ylim([0, 0.014]);
 for n=1:4
     X=duration(df.Instance(df.Quarter==periods(n)), 0, 0);
     X.Format="hh:mm";
     Y=df.Generation(df.Quarter==periods(n));
-    scatter(X, Y, '.', DisplayName=periods(n))
+    plot(X, Y, 'Color', [colors(n, :), 0.5], 'LineWidth', 0.8, 'HandleVisibility', 'off');
+    scatter(X, Y, '.', 'MarkerEdgeColor', colors(n, :), DisplayName=periods(n));
+    lgd=legend();
+    lgd.Title.String='Period';
 end
 
-lgd=legend();
-lgd.Title.String='Period';
+% lgd=legend();
+% lgd.Title.String='Period';
 
 pbaspect([2, 1, 1])
 
