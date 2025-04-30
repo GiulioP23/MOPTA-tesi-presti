@@ -93,14 +93,12 @@
 
 \institute[526947] %matricola
 {
-
-{\small Relatore}\\
-\medskip
-{\small Prof. Giuseppe De Nicolao}\\
-%\begin{center}
-%\includegraphics[width=0.1\textwidth]{uoh.png}
-%\end{center}
-\vspace{2cm}
+{\footnotesize Relatore}\\
+{\footnotesize Prof. Giuseppe de Nicolao}\\
+\smallskip
+{\footnotesize Correlatore}\\
+{\footnotesize Dott. Marco Capelletti}\\
+\vspace{2.1cm}
 \medskip
 Dipartimento di Ingegneria Informatica e dell'Informazione\\
 Università di Pavia% Your institution for the title page
@@ -111,7 +109,7 @@ Università di Pavia% Your institution for the title page
 %This will place the image at position "30 right/left and 120 up/down" relative to the top left corner of the current page.
 \titlegraphic{%
   \begin{picture}(0,0)
-    \put(37,128){\makebox(0,0)[rt]{\includegraphics[width=2.35cm]{general/logo_unipv_cut.png}}}
+    \put(37,128){\makebox(0,0)[rt]{\includegraphics[width=2.30cm]{general/logo_unipv_cut.png}}}
   \end{picture}
 }
  \date{30/04/2025}
@@ -164,7 +162,10 @@ Università di Pavia% Your institution for the title page
     \end{itemize}
     \vfill
     \centering
-    \includegraphics[width=0.9\textwidth,keepaspectratio]{solar/all_by_period.png}
+    \only<1>{\includegraphics[width=0.9\textwidth,keepaspectratio]{solar/all_by_period_1.png}}
+    \only<2>{\includegraphics[width=0.9\textwidth,keepaspectratio]{solar/all_by_period_12.png}}
+    \only<3>{\includegraphics[width=0.9\textwidth,keepaspectratio]{solar/all_by_period_123.png}}
+    \only<4>{\includegraphics[width=0.9\textwidth,keepaspectratio]{solar/all_by_period_1234.png}}
         
 \end{frame}
 
@@ -183,7 +184,7 @@ Università di Pavia% Your institution for the title page
     \end{itemize}
     \vfill
     \centering
-    \includegraphics[width=0.9\textwidth,keepaspectratio]{all_residenzial_load_period.png}
+    \includegraphics[width=0.9\textwidth,keepaspectratio]{all_residenzial_load_period_lines.png}
         
 \end{frame}
 
@@ -201,7 +202,7 @@ Università di Pavia% Your institution for the title page
     \end{itemize}
     \vfill
     \centering
-    \includegraphics[width=0.9\textwidth,keepaspectratio]{all_industrial_load_period.png}
+    \includegraphics[width=0.9\textwidth,keepaspectratio]{all_industrial_load_period_lines.png}
         
 \end{frame}
 
@@ -224,7 +225,7 @@ Università di Pavia% Your institution for the title page
     \centering
     \includegraphics[width=0.9\textwidth,keepaspectratio]{2_i_q2_MDL_poli.png}     
 
-    \scriptsize $MSE=5.47\text{MWh}^2$ e $R^2=0.95$
+    \scriptsize \text{5 parametri}, $MSE=5.47\text{MWh}^2$ e $R^2=0.95$
 \end{frame}
 
 \section{load-polinomial-1d-1}
@@ -245,7 +246,7 @@ Università di Pavia% Your institution for the title page
     \centering
     \includegraphics[width=0.9\textwidth,keepaspectratio]{2_r_q2_FPE_poli.png} 
     
-    \scriptsize $MSE=1.80\text{MWh}^2$ e $R^2=0.90$
+    \scriptsize  \text{10 parametri}, $MSE=1.80\text{MWh}^2$ e $R^2=0.90$
 \end{frame}
 
 % Slide 6
@@ -262,7 +263,7 @@ Università di Pavia% Your institution for the title page
     \centering
     \includegraphics[width=0.9\textwidth,keepaspectratio]{2_r_q2_FPE_fourier.png} 
     
-    \scriptsize $MSE=2.01\text{MWh}^2$ e $R^2=0.89$
+    \scriptsize  \text{5 parametri}, $MSE=2.01\text{MWh}^2$ e $R^2=0.89$
 \end{frame}
 
 \section{load-1d-summary}
@@ -273,7 +274,7 @@ Università di Pavia% Your institution for the title page
 	b_1sin\left(\dfrac{2\pi}{T}x\right)+b_2cos\left(\dfrac{2\pi}{T}x\right)+...+
 	b_{2k-1}sin\left(k\dfrac{2\pi}{T}x\right)+b_{2k}cos\left(k\dfrac{2\pi}{T}x\right)$  
         \vspace{0.7cm}
-        \item Confronto performance e flessibilità \textit{polinomi} vs \textit{serie di Fourier}:\\
+        \item Confronto performance e flessibilità \textit{polinomi} vs \textit{serie di Fourier}: \\
         \vspace{0.3cm}
         \begin{tabular}{|c|c|c|c|c|}
             \hline
@@ -316,7 +317,7 @@ Università di Pavia% Your institution for the title page
     \centering
     \includegraphics[width=0.9\textwidth,keepaspectratio]{all_residential_load_lasso_const_f.png} 
     
-    \scriptsize $MSE=10.2\text{MWh}^2$ e $R^2=0.81$
+    \scriptsize  \text{12 parametri}, $MSE=10.2\text{MWh}^2$ e $R^2=0.81$
 \end{frame}
 
 \section{load-fourier-3d-2}
@@ -331,6 +332,8 @@ Università di Pavia% Your institution for the title page
     \vfill
     \centering
     \includegraphics[width=0.42\textwidth,keepaspectratio]{all_residential_load_lasso_const_f_plotregression.png} 
+
+    \scriptsize \text{12 parametri}, $MSE= 10.2\text{MWh}^2$ e $R^2=0.82$
 \end{frame}
 
 \section{load-fourier-3d-3}
@@ -346,7 +349,7 @@ Università di Pavia% Your institution for the title page
     \centering
     \includegraphics[width=0.42\textwidth,keepaspectratio]{all_residential_load_forw_plotregression.png} 
 
-    \scriptsize $MSE= 8.72\text{MWh}^2$ e $R^2=0.84$
+    \scriptsize \text{18 parametri}, $MSE= 8.72\text{MWh}^2$ e $R^2=0.84$
 \end{frame}
 
 % Slide 8
@@ -394,8 +397,8 @@ Università di Pavia% Your institution for the title page
         \only<2>{\includegraphics[width=0.4\textwidth]{solar/all_pos_fourier_forward_plotregression.png}}
         \only<3>{\includegraphics[width=0.9\textwidth]{solar/all_pos_poli_forward.png}}
         
-        \only<1>{\scriptsize $MSE=2.05\cdot 10^{-6}\text{MWh}^2$ e $R^2=0.75$}
-        \only<2>{\scriptsize $MSE=1.29\cdot 10^{-6}\text{MWh}^2$ e $R^2=0.84$}
+        \only<1>{\scriptsize \text{8 parametri}, $MSE=2.05\cdot 10^{-6}\text{MWh}^2$ e $R^2=0.75$}
+        \only<2>{\scriptsize \text{10 parametri}, $MSE=1.29\cdot 10^{-6}\text{MWh}^2$ e $R^2=0.84$}
         \only<3>{\scriptsize \text{8 parametri}, $MSE=2.05\cdot 10^{-6}\text{MWh}^2$ e $R^2=0.75$}
     \end{overlayarea}
 \end{frame}
@@ -421,7 +424,7 @@ Università di Pavia% Your institution for the title page
 \small 
 \begin{lstlisting}
 Ty = 365;
-Td=24;
+Td = 24;
 
 Phi=@(instances, periods)[
     instances.^0 ... % cost
